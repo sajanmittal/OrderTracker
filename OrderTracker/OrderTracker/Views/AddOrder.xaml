@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OrderTracker.Views.AddOrder"
+             Title="Add Order">
+    
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="SAVE" Order="Primary" Clicked="Save_Clicked" />
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Content>
+        <StackLayout  Style="{StaticResource Form}">
+            <StackLayout Style="{StaticResource FormBlock}">
+                <Label Text="Tracking Number : "  Style="{StaticResource TextLabel}"  />
+                <Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Style="{StaticResource TextInput}" />
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource FormBlock}">
+                <Label Text="Phone Number : " Style="{StaticResource TextLabel}"  />
+                <Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Style="{StaticResource TextInput}" />
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource FormBlock}">
+                <Label Text="Details : " Style="{StaticResource TextLabel}"  />
+                <Entry Text="{Binding Model.Detail}" Style="{StaticResource TextInput}" />
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

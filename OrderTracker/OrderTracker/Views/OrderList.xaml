@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OrderTracker.Views.OrderList">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding Source={x:Reference OrderListView}, Path=ItemsSource.Count}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+    <ListView x:Name="OrderListView" Margin="20"
+            ItemsSource="{Binding OrderList}">
+        <!--Built in Cells-->
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Style="{Binding ListViewCell}">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+                            <Label Text="{Binding TrackingNo}" FontAttributes="Bold"/>
+                            <Label Text=", "/>
+                            <Label Text="{Binding PhoneNo}" FontAttributes="Bold"/>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="{Binding Detail}"/>
+                        </StackLayout>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    </ContentPage.Content>
+</ContentPage>
+ 
