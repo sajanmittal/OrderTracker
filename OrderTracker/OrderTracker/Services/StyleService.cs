@@ -92,6 +92,7 @@ namespace OrderTracker
                     new Setter{Property= View.HorizontalOptionsProperty, Value= LayoutOptions.CenterAndExpand},
                     new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.Center},
                     new Setter{Property= VisualElement.BackgroundColorProperty, Value= Color.Accent},
+                    new Setter{Property= Button.TextColorProperty, Value= Color.White},
                     new Setter{Property= View.MarginProperty, Value= new Thickness(10)},
                     new Setter{Property= View.WidthRequestProperty, Value = 200}
                 }
@@ -102,7 +103,7 @@ namespace OrderTracker
             {
                 Setters =
                 {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.Start},
+                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
                     new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.CenterAndExpand}
                 }
             };

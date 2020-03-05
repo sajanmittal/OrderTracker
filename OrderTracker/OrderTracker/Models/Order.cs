@@ -5,6 +5,11 @@ namespace OrderTracker
 {
     public class Order : BaseModelWithId
     {
+        public Order()
+        {
+            OrderDate = DateTime.Now;
+        }
+
         [Ignore]
         public override int Id => OrderId;
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,9 +11,12 @@ namespace OrderTracker
 {
     public class OrderViewModel : BaseViewModel<Order>
     {
-        public OrderViewModel(INavigation navigation) : base(navigation)
+        private Page page;
+
+        public OrderViewModel(INavigation navigation, Page page) : base(navigation)
         {
-            SaveCommand = new Command<Page>(async (page) => await SaveOrder(page));
+            this.page = page;
+            SaveCommand = new Command(async () => await SaveOrder());
             GetSearchDataCommand = new Command<SearchItem>(async (data) => await GetSearchData(data));
             ItemTapped = new Command<Order>(async (order) => await UpdateStatus(order));
             if (OrderList == null)
@@ -22,7 +26,7 @@ namespace OrderTracker
 
         public ICommand SaveCommand { get; set; }
 
-        public async Task SaveOrder(Page page)
+        public async Task SaveOrder()
         {
             try
             {
@@ -118,7 +122,28 @@ namespace OrderTracker
         {
             try
             {
-                await App.DbService.UpdateAsync(item);
+                var updateStatus = await page.DisplayActionSheet($"Change Status for {item.TrackingNo}!", "Cancel", null, "Received", "Cancelled");
+
+                switch(updateStatus)
+                {
+                    case "Cancel":
+                        return;
+                    case "Received":
+                        item.Status = OrderStatus.Received;
+                        break;
+                    case "Cancelled":
+                        item.Status = OrderStatus.Cancelled;
+                        break;
+                }
+
+               var isUpdated =  await App.DbService.UpdateAsync(item);
+                if(isUpdated > 0)
+                {
+                    var removedItem = items.FirstOrDefault(x => x.Id == item.Id);
+                    if (removedItem != null)
+                        items.Remove(removedItem);
+                    LoggerService.LogInformation($"Order {updateStatus}");
+                }
             }
             catch (Exception ex)
             {

@@ -23,7 +23,7 @@
                         </StackLayout>
                         <StackLayout Style="{StaticResource ListViewSubCell}">
                             <Label Text="{Binding Detail}"/>
-                            <Label Text="{Binding OrderDate}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                            <Label Text="{Binding OrderDate, StringFormat='{0:dd-MMM-yyyy}' }" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
                         </StackLayout>
                     </StackLayout>
                 </ViewCell>
