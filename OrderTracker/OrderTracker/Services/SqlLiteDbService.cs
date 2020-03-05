@@ -24,13 +24,10 @@ namespace OrderTracker
 
         async Task InitializeAsync()
         {
-            if (!initialized)
+            if (!initialized && !Db.TableMappings.Any(m => m.MappedType.Name == typeof(Order).Name))
             {
-                if (!Db.TableMappings.Any(m => m.MappedType.Name == typeof(Order).Name))
-                {
                     await Db.CreateTablesAsync(CreateFlags.AutoIncPK, typeof(Order)).ConfigureAwait(false);
                     initialized = true;
-                }
             }
         }
 
@@ -45,6 +42,11 @@ namespace OrderTracker
         public async Task<int> InsertAsync<T>(T model) where T :BaseModel
         {
             return await Db.InsertAsync(model, typeof(T));
+        }
+
+        public async Task<int> UpdateAsync<T>(T model) where T:BaseModel
+        {
+            return await Db.UpdateAsync(model, typeof(T));
         }
 
         public async Task BACKUP_DB(string backupDestinationPath, string backupDbName)

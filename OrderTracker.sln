@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTracker.Android", "OrderTracker\OrderTracker.Android\OrderTracker.Android.csproj", "{D77449EB-A42E-4098-AEE1-10C0355EAD1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTracker", "OrderTracker\OrderTracker\OrderTracker.csproj", "{C040A6AF-4C42-419B-A008-77F1CEF4C6C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderTracker", "OrderTracker\OrderTracker\OrderTracker.csproj", "{C040A6AF-4C42-419B-A008-77F1CEF4C6C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -35,5 +30,13 @@ namespace OrderTracker.Views
             viewModel.GetSearchDataCommand.Execute(item);
         }
 
+        private void OrderListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var item = e.Item as Order;
+            if(item != null)
+            {
+                viewModel.ItemTapped.Execute(item);
+            }
+        }
     }
 }

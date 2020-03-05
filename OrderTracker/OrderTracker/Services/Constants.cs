@@ -21,7 +21,7 @@ namespace OrderTracker
 
         public const string SAVED_MSG = "Saved Successfully";
 
-        public const string SAVE_OTHER_MSG = "Click More to save another or Done to go back.";
+        public const string SAVE_OTHER_MSG = "Want to Save Another?";
 
     }
 }

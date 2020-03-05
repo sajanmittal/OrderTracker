@@ -20,14 +20,18 @@
 
             <StackLayout Style="{StaticResource FormBlock}">
                 <Label Text="Phone Number : " Style="{StaticResource TextLabel}"  />
-                <Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Style="{StaticResource TextInput}" />
+                <Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Style="{StaticResource TextInput}" IsTextPredictionEnabled="True" />
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource FormBlock}">
+                <Label Text="Order Date : " Style="{StaticResource TextLabel}"  />
+                <DatePicker Date="{Binding Model.OrderDate}" Style="{StaticResource Date}" />
             </StackLayout>
 
             <StackLayout Style="{StaticResource FormBlock}">
                 <Label Text="Details : " Style="{StaticResource TextLabel}"  />
-                <Entry Text="{Binding Model.Detail}" Style="{StaticResource TextInput}" />
+                <Entry Text="{Binding Model.Detail}" Style="{StaticResource TextInput}" IsTextPredictionEnabled="True" />
             </StackLayout>
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

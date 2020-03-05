@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System;
 
 namespace OrderTracker
 {
@@ -10,13 +11,13 @@ namespace OrderTracker
         [PrimaryKey]
         public int OrderId { get; set; }
 
-        [Indexed(Unique = true)]
         public string TrackingNo { get; set; }
 
-        [Indexed(Unique = false)]
         public string PhoneNo { get; set; }
 
         public string Detail { get; set; }
+
+        public DateTime OrderDate { get; set; }
 
         public OrderStatus Status { get; set; }
     }

@@ -35,7 +35,7 @@ namespace OrderTracker
         static void logError(object sender, UnhandledExceptionEventArgs args)
         {
             Exception ex = (Exception)args.ExceptionObject;
-            Debug.WriteLine(ex.Message);
+            LoggerService.LogError(ex);
         }
     }
 }
