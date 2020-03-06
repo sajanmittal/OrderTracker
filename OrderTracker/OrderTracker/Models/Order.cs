@@ -8,6 +8,7 @@ namespace OrderTracker
         public Order()
         {
             OrderDate = DateTime.Now;
+            Detail = string.Empty;
         }
 
         [Ignore]
