@@ -1,5 +1,4 @@
 ﻿using OrderTracker.Views;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -8,9 +7,9 @@ namespace OrderTracker
 {
     public class MainViewModel : BaseViewModel<SearchItem>
     {
-        public MainViewModel(INavigation navigation):base(navigation)
+        public MainViewModel(INavigation navigation) : base(navigation)
         {
-            SearchCommand = new Command(async ()=> await SearchAsync());
+            SearchCommand = new Command(async () => await SearchAsync());
             AddOrderCommand = new Command(async () => await AddOrder());
         }
 
@@ -20,12 +19,15 @@ namespace OrderTracker
 
         public async Task SearchAsync()
         {
-            await Navigation.PushAsync(new OrderList(Model));
+            await RunAsync(async () => { await Navigation.PushAsync(new OrderList(Model)); });
         }
 
         public async Task AddOrder()
         {
-            await Navigation.PushAsync(new AddOrder());
+            await RunAsync(async () =>
+            {
+                await Navigation.PushAsync(new AddOrder());
+            });
         }
     }
 }

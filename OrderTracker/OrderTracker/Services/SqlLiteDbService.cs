@@ -26,25 +26,25 @@ namespace OrderTracker
         {
             if (!initialized && !Db.TableMappings.Any(m => m.MappedType.Name == typeof(Order).Name))
             {
-                    await Db.CreateTablesAsync(CreateFlags.AutoIncPK, typeof(Order)).ConfigureAwait(false);
-                    initialized = true;
+                await Db.CreateTablesAsync(CreateFlags.AutoIncPK, typeof(Order)).ConfigureAwait(false);
+                initialized = true;
             }
         }
 
-        public async Task<List<T>> SelectAsync<T>(Expression<Func<T, bool>> predicate =null) where T : BaseModel, new()
+        public async Task<List<T>> SelectAsync<T>(Expression<Func<T, bool>> predicate = null) where T : BaseModel, new()
         {
-            if(predicate == null)
+            if (predicate == null)
                 return await Db.Table<T>().ToListAsync();
             else
                 return await Db.Table<T>().Where(predicate).ToListAsync();
         }
 
-        public async Task<int> InsertAsync<T>(T model) where T :BaseModel
+        public async Task<int> InsertAsync<T>(T model) where T : BaseModel
         {
             return await Db.InsertAsync(model, typeof(T));
         }
 
-        public async Task<int> UpdateAsync<T>(T model) where T:BaseModel
+        public async Task<int> UpdateAsync<T>(T model) where T : BaseModel
         {
             return await Db.UpdateAsync(model, typeof(T));
         }

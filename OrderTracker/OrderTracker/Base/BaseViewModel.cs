@@ -1,27 +1,29 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace OrderTracker
 {
-    public abstract class BaseViewModel<T> : INotifyPropertyChanged where T:BaseModel, new()
+    public abstract class BaseViewModel<T> : INotifyPropertyChanged where T : BaseModel, new()
     {
         public BaseViewModel(INavigation _navigation)
         {
             Navigation = _navigation;
-            if(model == null)
+            if (model == null)
                 ResetModel();
         }
 
-        private bool isBusy;
+        private bool isNotBusy = true;
 
-        public bool IsBusy
+        public bool IsNotBusy
         {
-            get => isBusy;
+            get => isNotBusy;
 
             set
             {
-                SetProperty(ref isBusy, value, nameof(IsBusy));
+                SetProperty(ref isNotBusy, value, nameof(IsNotBusy));
             }
         }
 
@@ -54,10 +56,44 @@ namespace OrderTracker
             OnPropertyChanged(propertyName);
             return true;
         }
- 
+
         protected void ResetModel()
         {
             Model = new T();
+        }
+
+        public async Task RunAsync<D>(D data, Func<D, Task> action)
+        {
+            try
+            {
+                IsNotBusy = false;
+                await action(data);
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogError(ex);
+            }
+            finally
+            {
+                IsNotBusy = true;
+            }
+        }
+
+        public async Task RunAsync(Func<Task> action)
+        {
+            try
+            {
+                IsNotBusy = false;
+                await action();
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogError(ex);
+            }
+            finally
+            {
+                IsNotBusy = true;
+            }
         }
     }
 }

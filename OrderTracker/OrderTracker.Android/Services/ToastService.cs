@@ -23,7 +23,7 @@ namespace OrderTracker.Droid
         {
             var activity = CrossCurrentActivity.Current.Activity;
             Android.Views.View activityRootView = activity.FindViewById(Android.Resource.Id.Content);
-            Snackbar.Make(activityRootView, message, Snackbar.LengthIndefinite).Show();
+            Snackbar.Make(activityRootView, message, Snackbar.LengthLong).Show();
         }
 
         public void ShowToast(string message)

@@ -33,7 +33,7 @@ namespace OrderTracker.Views
         private void OrderListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var item = e.Item as Order;
-            if(item != null)
+            if (item != null)
             {
                 viewModel.ItemTapped.Execute(item);
             }

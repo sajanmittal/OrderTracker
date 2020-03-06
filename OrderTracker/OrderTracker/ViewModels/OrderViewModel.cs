@@ -28,8 +28,9 @@ namespace OrderTracker
 
         public async Task SaveOrder()
         {
-            try
+            await RunAsync(async () =>
             {
+
                 if (!string.IsNullOrWhiteSpace(Model.PhoneNo) && !string.IsNullOrWhiteSpace(Model.TrackingNo) && Model.OrderDate != null)
                 {
                     Model.Status = OrderStatus.Pending;
@@ -51,11 +52,7 @@ namespace OrderTracker
                 {
                     LoggerService.LogError(new Exception("All required information is not provided"));
                 }
-            }
-            catch(Exception ex)
-            {
-                LoggerService.LogError(ex);
-            }
+            });
         }
 
         private ObservableCollection<Order> items;
@@ -75,10 +72,11 @@ namespace OrderTracker
 
         public async Task GetSearchData(SearchItem searchItem)
         {
-            
-            List<Order> result = new List<Order>();
-            try
+            await RunAsync(async () =>
             {
+
+                List<Order> result = new List<Order>();
+
                 if (!string.IsNullOrWhiteSpace(searchItem.PhoneNo) && !string.IsNullOrWhiteSpace(searchItem.TrackingNo))
                 {
                     result.AddRange(await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending && x.TrackingNo.Contains(searchItem.TrackingNo) && x.PhoneNo.Contains(searchItem.PhoneNo)));
@@ -99,7 +97,7 @@ namespace OrderTracker
                 if (result.Count > 0)
                 {
                     result.ForEach(x => OrderList.Add(x));
-                    if(result.Count == 1)
+                    if (result.Count == 1)
                         LoggerService.LogInformation($"{result.Count} Record Found");
                     else
                         LoggerService.LogInformation($"{result.Count} Records Found");
@@ -108,11 +106,7 @@ namespace OrderTracker
                 {
                     LoggerService.LogInformation("No Record Found");
                 }
-            }
-            catch(Exception ex)
-            {
-                LoggerService.LogError(ex);
-            }
+            });
 
         }
 
@@ -120,11 +114,11 @@ namespace OrderTracker
 
         public async Task UpdateStatus(Order item)
         {
-            try
+            await RunAsync(async () =>
             {
-                var updateStatus = await page.DisplayActionSheet($"Change Status for {item.TrackingNo}!", "Cancel", null, "Received", "Cancelled");
+                var updateStatus = await page.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", Constants.UPDATE_TRACKING_NO);
 
-                switch(updateStatus)
+                switch (updateStatus)
                 {
                     case "Cancel":
                         return;
@@ -134,21 +128,38 @@ namespace OrderTracker
                     case "Cancelled":
                         item.Status = OrderStatus.Cancelled;
                         break;
+                    case Constants.UPDATE_TRACKING_NO:
+                        {
+                            var newNo = await page.DisplayPromptAsync(Constants.UPDATE_TRACKING_NO, $"Old Tracking No {item.TrackingNo}", "OK", "Cancel", null, 100, Keyboard.Numeric);
+                            if (!string.IsNullOrEmpty(newNo))
+                            {
+                                item.TrackingNo = newNo;
+                            }
+                            break;
+                        }
+
                 }
 
-               var isUpdated =  await App.DbService.UpdateAsync(item);
-                if(isUpdated > 0)
+                var isUpdated = await App.DbService.UpdateAsync(item);
+                if (isUpdated > 0)
                 {
                     var removedItem = items.FirstOrDefault(x => x.Id == item.Id);
                     if (removedItem != null)
-                        items.Remove(removedItem);
-                    LoggerService.LogInformation($"Order {updateStatus}");
+                    {
+                        if (updateStatus.Equals(Constants.UPDATE_TRACKING_NO))
+                        {
+                            int index = items.IndexOf(removedItem);
+                            items[index] = item;
+                            LoggerService.LogInformation($"Tracking Number Updated.");
+                        }
+                        else
+                        {
+                            items.Remove(removedItem);
+                            LoggerService.LogInformation($"Order {updateStatus}.");
+                        }
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                LoggerService.LogError(ex);
-            }
+            });
         }
     }
 }

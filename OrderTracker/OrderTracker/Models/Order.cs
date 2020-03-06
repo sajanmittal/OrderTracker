@@ -25,5 +25,9 @@ namespace OrderTracker
         public DateTime OrderDate { get; set; }
 
         public OrderStatus Status { get; set; }
+
+        [Ignore]
+        public string ShortDetail => Detail.Length <= 15 ? Detail : string.Concat(Detail.Substring(0, 15), "...");
+
     }
 }

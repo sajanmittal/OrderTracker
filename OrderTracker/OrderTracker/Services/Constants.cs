@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace OrderTracker
 {
@@ -23,5 +21,6 @@ namespace OrderTracker
 
         public const string SAVE_OTHER_MSG = "Want to Save Another?";
 
+        public const string UPDATE_TRACKING_NO = "Update Tracking Number";
     }
 }

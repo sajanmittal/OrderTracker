@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace OrderTracker
 {
@@ -18,8 +15,9 @@ namespace OrderTracker
         public static ResourceDictionary InitializeResources()
         {
 
-            var TextInput = new Style(typeof(Entry)) { 
-                 Setters =
+            var TextInput = new Style(typeof(Entry))
+            {
+                Setters =
                 {
                     new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
                     new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.CenterAndExpand}
@@ -39,9 +37,10 @@ namespace OrderTracker
             };
             Add(TextLabel, nameof(TextLabel));
 
-            var Form = new Style(typeof(StackLayout)) { 
+            var Form = new Style(typeof(StackLayout))
+            {
 
-                Setters=
+                Setters =
                 {
                     new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
                     new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.Start},
@@ -51,7 +50,8 @@ namespace OrderTracker
             };
             Add(Form, nameof(Form));
 
-            var FormBlock = new Style(typeof(StackLayout)) { 
+            var FormBlock = new Style(typeof(StackLayout))
+            {
 
                 Setters =
                 {
