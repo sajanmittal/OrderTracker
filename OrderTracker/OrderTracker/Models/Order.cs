@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using System;
 
 namespace OrderTracker
@@ -12,9 +13,11 @@ namespace OrderTracker
         }
 
         [Ignore]
+        [JsonIgnore]
         public override int Id => OrderId;
 
-        [PrimaryKey]
+        [PrimaryKey, AutoIncrement]
+        [JsonIgnore]
         public int OrderId { get; set; }
 
         public string TrackingNo { get; set; }
@@ -28,6 +31,7 @@ namespace OrderTracker
         public OrderStatus Status { get; set; }
 
         [Ignore]
+        [JsonIgnore]
         public string ShortDetail => Detail.Length <= 15 ? Detail : string.Concat(Detail.Substring(0, 15), "...");
 
     }

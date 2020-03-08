@@ -24,12 +24,30 @@ namespace OrderTracker
 
         async Task InitializeAsync()
         {
-            if (!initialized && !Db.TableMappings.Any(m => m.MappedType.Name == typeof(Order).Name))
+            try
             {
-                await Db.CreateTablesAsync(CreateFlags.AutoIncPK, typeof(Order)).ConfigureAwait(false);
-                initialized = true;
+                if (!initialized)
+                {
+
+                    if (!Db.TableMappings.Any(m => m.MappedType.Name == nameof(Setting)))
+                    {
+                        await Db.CreateTablesAsync(CreateFlags.None, TablesList).ConfigureAwait(true);
+                        if(Db.TableMappings.Any(x => x.MappedType.Equals(typeof(Setting))) && await SettingService.GetSetting(Constants.RESTORE_SETTING_KEY) == null)
+                        {
+                            await InsertAsync(new Setting { SettingName= Constants.RESTORE_SETTING_KEY, SettingValue ="false" });
+                        }
+                    }
+                    initialized = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogError(ex);
             }
         }
+
+        private Type[] TablesList => new Type[] { typeof(Setting), typeof(Order) };
+
 
         public async Task<List<T>> SelectAsync<T>(Expression<Func<T, bool>> predicate = null) where T : BaseModel, new()
         {
@@ -49,9 +67,37 @@ namespace OrderTracker
             return await Db.UpdateAsync(model, typeof(T));
         }
 
-        public async Task BACKUP_DB(string backupDestinationPath, string backupDbName)
+        public async Task<bool> ExistsAsync<T>(Expression<Func<T, bool>> predicate = null) where T : BaseModel, new()
         {
-            await Db.BackupAsync(backupDestinationPath, backupDbName);
+            var data = await FirstOrDefault(predicate);
+            return data != null;
+        }
+
+        public async Task<int> BulkInsertAsync<T>(ICollection<T> collection) where T : BaseModel
+        {
+            int result = 0;
+            if (collection.Count > 0)
+            {
+                result = await Db.InsertAllAsync(collection, typeof(T));
+            }
+
+            return result;
+        }
+
+        public async Task<bool> IsTableEmptyAsync<T>() where T : BaseModel, new()
+        {
+            var records = await SelectAsync<T>();
+            return records.Count > 0;
+        }
+
+        public async Task<T> SelectById<T>(int id) where T: BaseModelWithId, new()
+        {
+            return await FirstOrDefault<T>(x => x.Id == id);
+        }
+
+        public async Task<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate = null) where T : BaseModel, new()
+        {
+            return await Db.FindAsync(predicate);
         }
     }
 }

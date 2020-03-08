@@ -8,9 +8,10 @@ namespace OrderTracker
 {
     public abstract class BaseViewModel<T> : INotifyPropertyChanged where T : BaseModel, new()
     {
-        public BaseViewModel(INavigation _navigation)
+        public BaseViewModel(INavigation _navigation, Page page)
         {
             Navigation = _navigation;
+            Page = page;
             if (model == null)
                 ResetModel();
         }
@@ -35,6 +36,17 @@ namespace OrderTracker
             set
             {
                 SetProperty(ref model, value, nameof(Model));
+            }
+        }
+
+        private Page page;
+
+        public Page Page
+        {
+            get => page;
+            set
+            {
+                SetProperty(ref page, value, nameof(Page));
             }
         }
 
@@ -79,7 +91,7 @@ namespace OrderTracker
             }
         }
 
-        public async Task RunAsync(Func<Task> action)
+        public async Task RunAsync(Func<Task> action, Action<Exception> catchHandler = null, Action finalHadler = null)
         {
             try
             {
@@ -88,10 +100,12 @@ namespace OrderTracker
             }
             catch (Exception ex)
             {
+                catchHandler?.Invoke(ex);
                 LoggerService.LogError(ex);
             }
             finally
             {
+                finalHadler?.Invoke();
                 IsNotBusy = true;
             }
         }

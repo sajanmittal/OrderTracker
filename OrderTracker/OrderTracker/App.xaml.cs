@@ -1,24 +1,27 @@
 ﻿using System;
 using Xamarin.Forms;
+using Xamarin.Essentials;
+using System.Threading.Tasks;
 
 namespace OrderTracker
 {
     public partial class App : Application
     {
-        private static Lazy<SqlLiteDbService> db { get; set; }
+        private static SqlLiteDbService db { get; set; }
 
-        public static SqlLiteDbService DbService => db.Value;
+        public static SqlLiteDbService DbService => db;
         public App()
         {
             InitializeComponent();
             Resources = StyleService.InitializeResources();
             MainPage = new NavigationPage(new MainPage());
-            db = new Lazy<SqlLiteDbService>();
+            db = new SqlLiteDbService();
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             AppDomain.CurrentDomain.UnhandledException += logError;
+            await RequestPermissions();
         }
 
         protected override void OnSleep()
@@ -34,5 +37,19 @@ namespace OrderTracker
             Exception ex = (Exception)args.ExceptionObject;
             LoggerService.LogError(ex);
         }
+
+        private async Task RequestPermissions()
+        {
+            if ((await Permissions.CheckStatusAsync<Permissions.StorageRead>()) == PermissionStatus.Denied)
+            {
+                await Permissions.RequestAsync<Permissions.StorageRead>();
+            }
+
+            if ((await Permissions.CheckStatusAsync<Permissions.StorageWrite>()) == PermissionStatus.Denied)
+            {
+                await Permissions.RequestAsync<Permissions.StorageWrite>();
+            }
+        }
+
     }
 }

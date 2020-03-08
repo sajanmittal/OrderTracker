@@ -12,7 +12,7 @@ namespace OrderTracker
             InitializeComponent();
             if (viewModel == null)
             {
-                viewModel = new MainViewModel(Navigation);
+                viewModel = new MainViewModel(Navigation, this);
                 BindingContext = viewModel;
             }
         }

@@ -11,11 +11,9 @@ namespace OrderTracker
 {
     public class OrderViewModel : BaseViewModel<Order>
     {
-        private Page page;
 
-        public OrderViewModel(INavigation navigation, Page page) : base(navigation)
+        public OrderViewModel(INavigation navigation, Page page) : base(navigation, page)
         {
-            this.page = page;
             SaveCommand = new Command(async () => await SaveOrder());
             GetSearchDataCommand = new Command<SearchItem>(async (data) => await GetSearchData(data));
             ItemTapped = new Command<Order>(async (order) => await UpdateStatus(order));
@@ -37,7 +35,7 @@ namespace OrderTracker
                     int records = await App.DbService.InsertAsync(Model);
                     if (records > 0)
                     {
-                        var option = await page.DisplayAlert(Constants.SAVED_MSG, Constants.SAVE_OTHER_MSG, "SAVE ANOTHER", "GO BACK");
+                        var option = await Page.DisplayAlert(Constants.SAVED_MSG, Constants.SAVE_OTHER_MSG, "SAVE ANOTHER", "GO BACK");
                         if (option)
                         {
                             ResetModel();
@@ -96,6 +94,7 @@ namespace OrderTracker
 
                 if (result.Count > 0)
                 {
+                    result.OrderBy(x => x.OrderDate);
                     result.ForEach(x => OrderList.Add(x));
                     if (result.Count == 1)
                         LoggerService.LogInformation($"{result.Count} Record Found");
@@ -116,7 +115,7 @@ namespace OrderTracker
         {
             await RunAsync(async () =>
             {
-                var updateStatus = await page.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", Constants.UPDATE_TRACKING_NO);
+                var updateStatus = await Page.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", Constants.UPDATE_TRACKING_NO);
 
                 switch (updateStatus)
                 {
@@ -130,7 +129,7 @@ namespace OrderTracker
                         break;
                     case Constants.UPDATE_TRACKING_NO:
                         {
-                            var newNo = await page.DisplayPromptAsync(Constants.UPDATE_TRACKING_NO, $"Old Tracking No {item.TrackingNo}", "OK", "Cancel", null, 100, Keyboard.Numeric);
+                            var newNo = await Page.DisplayPromptAsync(Constants.UPDATE_TRACKING_NO, $"Old Tracking No {item.TrackingNo}", "OK", "Cancel", null, 100, Keyboard.Numeric);
                             if (!string.IsNullOrEmpty(newNo))
                             {
                                 item.TrackingNo = newNo;
