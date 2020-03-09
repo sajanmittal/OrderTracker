@@ -30,6 +30,7 @@ namespace OrderTracker
 
         public OrderStatus Status { get; set; }
 
+        public string CloneNo { get; set; }
         [Ignore]
         [JsonIgnore]
         public string ShortDetail => Detail.Length <= 15 ? Detail : string.Concat(Detail.Substring(0, 15), "...");

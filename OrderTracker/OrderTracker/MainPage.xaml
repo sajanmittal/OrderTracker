@@ -13,6 +13,11 @@
     <StackLayout Style="{StaticResource Form}">
         <!-- Place new controls here -->
         <StackLayout  Style="{StaticResource FormBlock}">
+            <Label Text="Clone Number : "  Style="{StaticResource TextLabel}" />
+            <Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}"  Style="{StaticResource TextInput}" />
+        </StackLayout>
+
+        <StackLayout  Style="{StaticResource FormBlock}">
             <Label Text="Tracking Number : "  Style="{StaticResource TextLabel}" />
             <Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}"  Style="{StaticResource TextInput}" />
         </StackLayout>
@@ -26,14 +31,15 @@
             <Button Text="Search" Command="{Binding SearchCommand}" Style="{StaticResource BaseButton}" />
         </StackLayout>
 
-        <!--<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+        <StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
             <Button Text="Backup Data" Command="{Binding BackupCommand}" Style="{StaticResource BaseButton}" />
         </StackLayout>
 
-        <StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+        <!--<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
             <Button Text="Restore Data" Command="{Binding RestoreCommand}" Style="{StaticResource BaseButton}" />
         </StackLayout>-->
 
+        <ActivityIndicator IsRunning="{Binding IsBusy}" />
     </StackLayout>
 
 </ContentPage>

@@ -9,23 +9,24 @@
         <ToolbarItem Text="{Binding Source={x:Reference OrderListView}, Path=ItemsSource.Count}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-    <ListView x:Name="OrderListView" Margin="20" VerticalOptions="FillAndExpand" ItemTapped="OrderListView_ItemTapped"
-            ItemsSource="{Binding OrderList}">
+        <ListView x:Name="OrderListView" ItemTapped="OrderListView_ItemTapped" ItemsSource="{Binding OrderList}" Style="{StaticResource ListViewLayout}" >
         <!--Built in Cells-->
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <StackLayout Style="{Binding ListViewCell}">
-                        <StackLayout Style="{StaticResource ListViewSubCell}">
-                            <Label Text="{Binding TrackingNo}" FontAttributes="Bold"/>
-                            <Label Text=", "/>
-                            <Label Text="{Binding PhoneNo}" FontAttributes="Bold"/>
+                        <StackLayout Style="{Binding ListViewCell}">
+                            <StackLayout Style="{StaticResource ListViewSubCell}">
+                                <Label Text="{Binding CloneNo}" Style="{StaticResource ListViewLabel}"/>
+                                <Label Text="-"/>
+                                <Label Text="{Binding PhoneNo}"  Style="{StaticResource ListViewLabel}"/>
+                                <Label Text="{Binding TrackingNo}" Style="{StaticResource ListViewLabel}" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+
+                            <StackLayout Style="{StaticResource ListViewSubCell}">
+                                <Label Text="{Binding Detail}"/>
+                                <Label Text="{Binding OrderDate, StringFormat='{0:dd-MMM-yyyy}' }" Style="{StaticResource ListViewLabel}" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout Style="{StaticResource ListViewSubCell}">
-                            <Label Text="{Binding Detail}"/>
-                            <Label Text="{Binding OrderDate, StringFormat='{0:dd-MMM-yyyy}' }" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </StackLayout>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>

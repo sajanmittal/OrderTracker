@@ -13,7 +13,7 @@ namespace OrderTracker
         public async static Task<T> GetSettingValue<T>(string settingName) 
         {
             var setting = await App.DbService.FirstOrDefault<Setting>(x => x.SettingName == settingName);
-            if (setting == null || !string.IsNullOrEmpty(setting.SettingValue))
+            if (setting == null || string.IsNullOrEmpty(setting.SettingValue))
                 return default;
 
             return UtilityService.ConvertTo<T>(setting.SettingValue, default);

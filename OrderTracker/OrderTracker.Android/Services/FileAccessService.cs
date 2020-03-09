@@ -1,4 +1,5 @@
 ﻿using Xamarin.Forms;
+using Android.OS;
 
 [assembly: Dependency(typeof(OrderTracker.Droid.FileAccessService))]
 namespace OrderTracker.Droid
@@ -7,7 +8,7 @@ namespace OrderTracker.Droid
     {
         public string GetFileLocation()
         {
-            return Android.OS.Environment.DirectoryDownloads;
+            return Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDownloads).AbsolutePath;
         }
     }
 }

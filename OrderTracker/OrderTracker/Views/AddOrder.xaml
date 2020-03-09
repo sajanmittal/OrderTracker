@@ -13,6 +13,12 @@
     
     <ContentPage.Content>
         <StackLayout  Style="{StaticResource Form}">
+            
+            <StackLayout Style="{StaticResource FormBlock}">
+                <Label Text="Clone Number : "  Style="{StaticResource TextLabel}"  />
+                <Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Style="{StaticResource TextInput}" />
+            </StackLayout>
+            
             <StackLayout Style="{StaticResource FormBlock}">
                 <Label Text="Tracking Number : "  Style="{StaticResource TextLabel}"  />
                 <Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Style="{StaticResource TextInput}" />
@@ -32,6 +38,8 @@
                 <Label Text="Details : " Style="{StaticResource TextLabel}"  />
                 <Entry Text="{Binding Model.Detail}" Style="{StaticResource TextInput}" IsTextPredictionEnabled="True" />
             </StackLayout>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="Accent" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

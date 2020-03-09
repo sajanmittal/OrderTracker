@@ -29,7 +29,7 @@ namespace OrderTracker
             await RunAsync(async () =>
             {
 
-                if (!string.IsNullOrWhiteSpace(Model.PhoneNo) && !string.IsNullOrWhiteSpace(Model.TrackingNo) && Model.OrderDate != null)
+                if (!string.IsNullOrWhiteSpace(Model.PhoneNo) && Model.OrderDate != null)
                 {
                     Model.Status = OrderStatus.Pending;
                     int records = await App.DbService.InsertAsync(Model);
@@ -75,26 +75,27 @@ namespace OrderTracker
 
                 List<Order> result = new List<Order>();
 
-                if (!string.IsNullOrWhiteSpace(searchItem.PhoneNo) && !string.IsNullOrWhiteSpace(searchItem.TrackingNo))
+                var query = (await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending)).AsQueryable();
+
+                if(!string.IsNullOrWhiteSpace(searchItem.CloneNo))
                 {
-                    result.AddRange(await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending && x.TrackingNo.Contains(searchItem.TrackingNo) && x.PhoneNo.Contains(searchItem.PhoneNo)));
+                    query = query.Where(x => x.CloneNo != null && x.CloneNo.Contains(searchItem.CloneNo));
                 }
-                else if (!string.IsNullOrWhiteSpace(searchItem.TrackingNo))
+
+                if(!string.IsNullOrWhiteSpace(searchItem.PhoneNo))
                 {
-                    result.AddRange(await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending && x.TrackingNo.Contains(searchItem.TrackingNo)));
+                    query = query.Where(x => x.PhoneNo != null && x.PhoneNo.Contains(searchItem.PhoneNo));
                 }
-                else if (!string.IsNullOrWhiteSpace(searchItem.PhoneNo))
+
+                if(!string.IsNullOrWhiteSpace(searchItem.TrackingNo))
                 {
-                    result.AddRange(await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending && x.TrackingNo.Contains(searchItem.PhoneNo)));
+                    query = query.Where(x => x.TrackingNo != null && x.TrackingNo.Contains(searchItem.TrackingNo));
                 }
-                else
-                {
-                    result.AddRange(await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending));
-                }
+
+                result.AddRange(query.OrderBy(x => x.OrderDate));
 
                 if (result.Count > 0)
                 {
-                    result.OrderBy(x => x.OrderDate);
                     result.ForEach(x => OrderList.Add(x));
                     if (result.Count == 1)
                         LoggerService.LogInformation($"{result.Count} Record Found");
@@ -160,5 +161,6 @@ namespace OrderTracker
                 }
             });
         }
+
     }
 }

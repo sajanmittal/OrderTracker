@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xamarin.Forms;
-using Xamarin.Essentials;
 
 namespace OrderTracker
 {
@@ -17,7 +16,7 @@ namespace OrderTracker
             if(orderData.Any())
             {
                 var serializedData = JsonConvert.SerializeObject(orderData);
-                var fileName = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal, System.Environment.SpecialFolderOption.Create),DependencyService.Get<IFileAccessService>().GetFileLocation(), Constants.BACKUP_FILE_NAME);
+                var fileName = Path.Combine(DependencyService.Get<IFileAccessService>().GetFileLocation(), Constants.BACKUP_FILE_NAME);
                 File.WriteAllText(fileName, serializedData);
             }
             return BackupRestoreStatus.Sucess;
@@ -25,7 +24,7 @@ namespace OrderTracker
 
         public async static Task<BackupRestoreStatus> RestoreData()
         {
-            var fileName = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),DependencyService.Get<IFileAccessService>().GetFileLocation(), Constants.BACKUP_FILE_NAME);
+            var fileName = Path.Combine(DependencyService.Get<IFileAccessService>().GetFileLocation(), Constants.BACKUP_FILE_NAME);
             var restoreSetting = await SettingService.GetSettingValue<bool>(Constants.RESTORE_SETTING_KEY);
             if (!restoreSetting && File.Exists(fileName))
             {
@@ -42,7 +41,7 @@ namespace OrderTracker
                             if(setting != null)
                             {
                                 setting.SettingValue = "true";
-                                await App.DbService.UpdateAsync(setting);
+                                int isUpdated = await App.DbService.UpdateAsync(setting);
                                 return BackupRestoreStatus.Sucess;
                             }
                         }

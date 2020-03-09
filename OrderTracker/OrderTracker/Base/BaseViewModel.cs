@@ -16,15 +16,15 @@ namespace OrderTracker
                 ResetModel();
         }
 
-        private bool isNotBusy = true;
+        private bool isBusy;
 
-        public bool IsNotBusy
+        public bool IsBusy
         {
-            get => isNotBusy;
+            get => isBusy;
 
             set
             {
-                SetProperty(ref isNotBusy, value, nameof(IsNotBusy));
+                SetProperty(ref isBusy, value, nameof(IsBusy));
             }
         }
 
@@ -78,8 +78,11 @@ namespace OrderTracker
         {
             try
             {
-                IsNotBusy = false;
-                await action(data);
+                if (!isBusy)
+                {
+                    IsBusy = true;
+                    await action?.Invoke(data);
+                }
             }
             catch (Exception ex)
             {
@@ -87,7 +90,7 @@ namespace OrderTracker
             }
             finally
             {
-                IsNotBusy = true;
+                IsBusy = false;
             }
         }
 
@@ -95,8 +98,11 @@ namespace OrderTracker
         {
             try
             {
-                IsNotBusy = false;
-                await action();
+                if (!isBusy)
+                {
+                    IsBusy = true;
+                    await action?.Invoke();
+                }
             }
             catch (Exception ex)
             {
@@ -106,7 +112,7 @@ namespace OrderTracker
             finally
             {
                 finalHadler?.Invoke();
-                IsNotBusy = true;
+                IsBusy = false;
             }
         }
     }

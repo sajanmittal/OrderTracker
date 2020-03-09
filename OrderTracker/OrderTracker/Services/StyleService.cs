@@ -69,7 +69,9 @@ namespace OrderTracker
                 {
                     new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
                     new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
-                    new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Vertical}
+                    new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Vertical},
+                    new Setter{Property= View.MarginProperty, Value= new Thickness(30)},
+                    new Setter{Property= Layout.PaddingProperty, Value= new Thickness(20,50)}
                 }
             };
             Add(ListViewCell, nameof(ListViewCell));
@@ -85,6 +87,16 @@ namespace OrderTracker
             };
             Add(ListViewSubCell, nameof(ListViewSubCell));
 
+            var ListViewLabel = new Style(typeof(Label))
+            {
+                Setters =
+                {
+                    new Setter{Property = Label.FontAttributesProperty, Value= FontAttributes.Bold},
+                    new Setter{Property = Label.FontSizeProperty, Value = 14}
+                }
+            };
+            Add(ListViewLabel, nameof(ListViewLabel));
+
             var BaseButton = new Style(typeof(Button))
             {
                 Setters =
@@ -94,7 +106,7 @@ namespace OrderTracker
                     new Setter{Property= VisualElement.BackgroundColorProperty, Value= Color.Accent},
                     new Setter{Property= Button.TextColorProperty, Value= Color.White},
                     new Setter{Property= View.MarginProperty, Value= new Thickness(10)},
-                    new Setter{Property= View.WidthRequestProperty, Value = 200}
+                    new Setter{Property= VisualElement.WidthRequestProperty, Value = 200}
                 }
             };
             Add(BaseButton, nameof(BaseButton));
@@ -108,6 +120,20 @@ namespace OrderTracker
                 }
             };
             Add(Date, nameof(Date));
+
+            var ListViewLayout = new Style(typeof(ListView))
+            {
+                Setters=
+                {
+                    new Setter{Property= View.HorizontalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+                    new Setter{Property= View.MarginProperty, Value= new Thickness(20)},
+                    new Setter{Property= ListView.HasUnevenRowsProperty, Value= false},
+                    new Setter{Property= ListView.SeparatorColorProperty, Value = Color.Accent},
+                    new Setter{Property= ListView.IsPullToRefreshEnabledProperty, Value= false}
+                }
+            };
+            Add(ListViewLayout, nameof(ListViewLayout));
 
             return resources;
 

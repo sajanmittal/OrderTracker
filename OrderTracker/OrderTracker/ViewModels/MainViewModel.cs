@@ -40,7 +40,17 @@ namespace OrderTracker
             BackupRestoreStatus status = BackupRestoreStatus.Processing;
 
            await RunAsync(async () => {
-                 status = await BackupService.BackupData();
+
+               var backupDataCheck = await Page.DisplayAlert("Are you sure you want to backup data?", "Click yes to confirm", "Yes, I am Sure", "Cancel");
+
+               if (backupDataCheck)
+               {
+                   var password = await Page.DisplayPromptAsync("Backup Data Password", "Please enter password to restore data", "Submit", "Cancel", "Password", 8, Keyboard.Text);
+                   if (password != Constants.RESTORE_DATA_PASSWORD)
+                       throw new Exception("Incorrect Password");
+
+                   status = await BackupService.BackupData();
+               }
             },
             (ex) => {
                 status = BackupRestoreStatus.Failed;
