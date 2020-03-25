@@ -1,4 +1,5 @@
 ﻿
+using OrderTracker.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,158 +10,192 @@ using Xamarin.Forms;
 
 namespace OrderTracker
 {
-    public class OrderViewModel : BaseViewModel<Order>
-    {
+	public class OrderViewModel : ViewModelBase<Order>
+	{
 
-        public OrderViewModel(INavigation navigation, Page page) : base(navigation, page)
-        {
-            SaveCommand = new Command(async () => await SaveOrder());
-            GetSearchDataCommand = new Command<SearchItem>(async (data) => await GetSearchData(data));
-            ItemTapped = new Command<Order>(async (order) => await UpdateStatus(order));
-            if (OrderList == null)
-                OrderList = new ObservableCollection<Order>();
+		public OrderViewModel(Page page, bool isEditPage = false) : base( page)
+		{
+			SaveCommand = new Command(async () => await SaveOrder(), CanSaveOrder);
+			GetSearchDataCommand = new Command<SearchItem>(async (data) => await GetSearchData(data));
+			ItemTapped = new Command<Order>(async (order) => await UpdateStatus(order));
+			GenerateReportCommad = new Command(async () => await DownloadReport());
+			this.isEditPage = isEditPage;
+			if (OrderList == null)
+				OrderList = new ObservableCollection<Order>();
 
-        }
+		}
 
-        public ICommand SaveCommand { get; set; }
+		protected bool isEditPage;
 
-        public async Task SaveOrder()
-        {
-            await RunAsync(async () =>
-            {
+		public ICommand SaveCommand { get; set; }
 
-                if (!string.IsNullOrWhiteSpace(Model.PhoneNo) && Model.OrderDate != null)
-                {
-                    Model.Status = OrderStatus.Pending;
-                    int records = await App.DbService.InsertAsync(Model);
-                    if (records > 0)
-                    {
-                        var option = await Page.DisplayAlert(Constants.SAVED_MSG, Constants.SAVE_OTHER_MSG, "SAVE ANOTHER", "GO BACK");
-                        if (option)
-                        {
-                            ResetModel();
-                        }
-                        else
-                        {
-                            await Navigation.PopAsync();
-                        }
-                    }
-                }
-                else
-                {
-                    LoggerService.LogError(new Exception("All required information is not provided"));
-                }
-            });
-        }
+		private bool CanSaveOrder()
+		{
+			if (string.IsNullOrWhiteSpace(Model.PhoneNo) || Model.OrderDate == null || string.IsNullOrWhiteSpace(Model.CloneNo))
+			{
+				LoggerService.LogError(new Exception("All required information is not provided"));
+				return false;
+			}
+			return true;
+		}
 
-        private ObservableCollection<Order> items;
-        public ObservableCollection<Order> OrderList
-        {
-            get
-            {
-                return items;
-            }
-            set
-            {
-                SetProperty(ref items, value, nameof(OrderList));
-            }
-        }
+		private async Task SaveOrder()
+		{
+			await RunAsync(async () =>
+			{
+					if(isEditPage)
+						await UpdateOrder();
+					else
+						await AddNewOrder();
 
-        public ICommand GetSearchDataCommand { get; set; }
+			});
+		}
 
-        public async Task GetSearchData(SearchItem searchItem)
-        {
-            await RunAsync(async () =>
-            {
+		private ObservableCollection<Order> items;
+		public ObservableCollection<Order> OrderList
+		{
+			get => items;
+			set => SetProperty(ref items, value, nameof(OrderList));
+		}
 
-                List<Order> result = new List<Order>();
+		public ICommand GetSearchDataCommand { get; set; }
 
-                var query = (await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending)).AsQueryable();
+		private async Task GetSearchData(SearchItem searchItem)
+		{
+			await RunAsync(async () =>
+			{
 
-                if(!string.IsNullOrWhiteSpace(searchItem.CloneNo))
-                {
-                    query = query.Where(x => x.CloneNo != null && x.CloneNo.Contains(searchItem.CloneNo));
-                }
+				List<Order> result = new List<Order>();
 
-                if(!string.IsNullOrWhiteSpace(searchItem.PhoneNo))
-                {
-                    query = query.Where(x => x.PhoneNo != null && x.PhoneNo.Contains(searchItem.PhoneNo));
-                }
+				var query = (await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending)).AsQueryable();
 
-                if(!string.IsNullOrWhiteSpace(searchItem.TrackingNo))
-                {
-                    query = query.Where(x => x.TrackingNo != null && x.TrackingNo.Contains(searchItem.TrackingNo));
-                }
+				if (!string.IsNullOrWhiteSpace(searchItem.CloneNo))
+				{
+					query = query.Where(x => x.CloneNo != null && x.CloneNo.Contains(searchItem.CloneNo));
+				}
 
-                result.AddRange(query.OrderBy(x => x.OrderDate));
+				if (!string.IsNullOrWhiteSpace(searchItem.PhoneNo))
+				{
+					query = query.Where(x => x.PhoneNo != null && x.PhoneNo.Contains(searchItem.PhoneNo));
+				}
 
-                if (result.Count > 0)
-                {
-                    result.ForEach(x => OrderList.Add(x));
-                    if (result.Count == 1)
-                        LoggerService.LogInformation($"{result.Count} Record Found");
-                    else
-                        LoggerService.LogInformation($"{result.Count} Records Found");
-                }
-                else
-                {
-                    LoggerService.LogInformation("No Record Found");
-                }
-            });
+				if (!string.IsNullOrWhiteSpace(searchItem.TrackingNo))
+				{
+					query = query.Where(x => x.TrackingNo != null && x.TrackingNo.Contains(searchItem.TrackingNo));
+				}
 
-        }
+				result.AddRange(query.OrderBy(x => x.OrderDate));
 
-        public ICommand ItemTapped { get; set; }
+				if (result.Any())
+				{
+					OrderList.Clear();
+					OrderList.AddRange(result);
+					if (result.Count == 1)
+						LoggerService.LogInformation($"{result.Count} Record Found");
+					else
+						LoggerService.LogInformation($"{result.Count} Records Found");
+				}
+				else
+				{
+					LoggerService.LogInformation("No Record Found");
+				}
+			});
 
-        public async Task UpdateStatus(Order item)
-        {
-            await RunAsync(async () =>
-            {
-                var updateStatus = await Page.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", Constants.UPDATE_TRACKING_NO);
+		}
 
-                switch (updateStatus)
-                {
-                    case "Cancel":
-                        return;
-                    case "Received":
-                        item.Status = OrderStatus.Received;
-                        break;
-                    case "Cancelled":
-                        item.Status = OrderStatus.Cancelled;
-                        break;
-                    case Constants.UPDATE_TRACKING_NO:
-                        {
-                            var newNo = await Page.DisplayPromptAsync(Constants.UPDATE_TRACKING_NO, $"Old Tracking No {item.TrackingNo}", "OK", "Cancel", null, 100, Keyboard.Numeric);
-                            if (!string.IsNullOrEmpty(newNo))
-                            {
-                                item.TrackingNo = newNo;
-                            }
-                            break;
-                        }
+		public ICommand ItemTapped { get; set; }
 
-                }
+		private async Task UpdateStatus(Order item)
+		{
+			await RunAsync(async () =>
+			{
+				Model = item;
+				var updateStatus = await Page.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", "Update Record");
 
-                var isUpdated = await App.DbService.UpdateAsync(item);
-                if (isUpdated > 0)
-                {
-                    var removedItem = items.FirstOrDefault(x => x.Id == item.Id);
-                    if (removedItem != null)
-                    {
-                        if (updateStatus.Equals(Constants.UPDATE_TRACKING_NO))
-                        {
-                            int index = items.IndexOf(removedItem);
-                            items[index] = item;
-                            LoggerService.LogInformation($"Tracking Number Updated.");
-                        }
-                        else
-                        {
-                            items.Remove(removedItem);
-                            LoggerService.LogInformation($"Order {updateStatus}.");
-                        }
-                    }
-                }
-            });
-        }
+				switch (updateStatus)
+				{
+					case "Cancel":
+						return;
+					case "Received":
+						item.Status = OrderStatus.Received;
+						await UpdateItemStatus(item);
+						break;
+					case "Cancelled":
+						item.Status = OrderStatus.Cancelled;
+						await UpdateItemStatus(item);
+						break;
+					case "Update Record":
+						{
+							await Page.Navigation.PushAsync(new AddOrder(item));
+							break;
+						}
+				}
+			});
+		}
 
-    }
+		public ICommand GenerateReportCommad { get; set; }
+
+		private async Task DownloadReport()
+		{
+			ReportGenResponse response = ReportGenResponse.Empty;
+			var fileName = $"Order Summary {DateTime.Now.ToString(Constants.FILE_DATE_FRMT)}";
+			await RunAsync(async () =>
+			{
+				IReportService reportService = new LocalReportService();
+				var data = await App.DbService.SelectAsync<Order>();
+				response = await reportService.Generate(data.OrderBy(x => x.Status), fileName);
+			},
+			(ex) =>
+			{
+				response = ReportGenResponse.Empty;
+			});
+
+			if(response.IsGenerated)
+			{
+				LoggerService.LogInformation($"Report {fileName} Successfully Dowloaded ");
+			}
+
+		}
+
+		private async Task AddNewOrder()
+		{
+			Model.Status = OrderStatus.Pending;
+			int records = await App.DbService.InsertAsync(Model);
+			if (records > 0)
+			{
+				var option = await Page.DisplayAlert(Constants.SAVED_MSG, Constants.SAVE_OTHER_MSG, "ADD MORE", "GO BACK");
+				if (option)
+				{
+					ResetModel();
+				}
+				else
+				{
+					await PopAsync();
+				}
+			}
+		}
+
+		private async Task UpdateOrder()
+		{
+			int updatedRecord = await App.DbService.UpdateAsync(Model);
+			if(updatedRecord > 0)
+			{
+				await PopAsync();
+			}
+		}
+
+		private async Task UpdateItemStatus(Order item)
+		{
+			var isUpdated = await App.DbService.UpdateAsync(item);
+			if (isUpdated > 0)
+			{
+				var removedItem = items.FirstOrDefault(x => x.Id == item.Id);
+				if (removedItem != null)
+				{
+						items.Remove(removedItem);
+						LoggerService.LogInformation($"Order {removedItem.Status}.");
+				}
+			}
+		}
+	}
 }

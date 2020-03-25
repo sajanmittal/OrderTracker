@@ -15,7 +15,7 @@ namespace OrderTracker.Views
             InitializeComponent();
             item = searchItem;
             if (viewModel == null)
-                viewModel = new OrderViewModel(Navigation, this);
+                viewModel = new OrderViewModel( this);
 
             BindingContext = viewModel;
         }

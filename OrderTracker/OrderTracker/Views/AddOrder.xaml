@@ -6,40 +6,41 @@
              mc:Ignorable="d"
              x:Class="OrderTracker.Views.AddOrder"
              Title="Add Order">
-    
-    <ContentPage.ToolbarItems >
-        <ToolbarItem Text="SAVE" Order="Primary" Clicked="Save_Clicked" />
-    </ContentPage.ToolbarItems>
-    
-    <ContentPage.Content>
-        <StackLayout  Style="{StaticResource Form}">
-            
-            <StackLayout Style="{StaticResource FormBlock}">
-                <Label Text="Clone Number : "  Style="{StaticResource TextLabel}"  />
-                <Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Style="{StaticResource TextInput}" />
-            </StackLayout>
-            
-            <StackLayout Style="{StaticResource FormBlock}">
-                <Label Text="Tracking Number : "  Style="{StaticResource TextLabel}"  />
-                <Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Style="{StaticResource TextInput}" />
-            </StackLayout>
 
-            <StackLayout Style="{StaticResource FormBlock}">
-                <Label Text="Phone Number : " Style="{StaticResource TextLabel}"  />
-                <Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Style="{StaticResource TextInput}" IsTextPredictionEnabled="True" />
-            </StackLayout>
+	<ContentPage.ToolbarItems >
+		<ToolbarItem Text="SAVE" Order="Primary" Command="{Binding SaveCommand}" />
+	</ContentPage.ToolbarItems>
 
-            <StackLayout Style="{StaticResource FormBlock}">
-                <Label Text="Order Date : " Style="{StaticResource TextLabel}"  />
-                <DatePicker Date="{Binding Model.OrderDate}" Style="{StaticResource Date}" />
-            </StackLayout>
+	<ContentPage.Content>
+		<AbsoluteLayout>
+			<ScrollView Style="{StaticResource FormScroll}">
+				<StackLayout  Style="{StaticResource Form}" IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
 
-            <StackLayout Style="{StaticResource FormBlock}">
-                <Label Text="Details : " Style="{StaticResource TextLabel}"  />
-                <Entry Text="{Binding Model.Detail}" Style="{StaticResource TextInput}" IsTextPredictionEnabled="True" />
-            </StackLayout>
+					<StackLayout Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Placeholder="Clone Number" />
+					</StackLayout>
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="Accent" />
-        </StackLayout>
-    </ContentPage.Content>
+					<StackLayout Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Placeholder="Tracking Number" />
+					</StackLayout>
+
+					<StackLayout Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Placeholder="Mobile Number" />
+					</StackLayout>
+
+					<StackLayout Style="{StaticResource FormBlock}">
+						<Label Text="Order Date : " Style="{StaticResource TextLabel}" HorizontalOptions="Start"/>
+						<DatePicker Date="{Binding Model.OrderDate}" HorizontalOptions="FillAndExpand"  />
+					</StackLayout>
+
+					<StackLayout Style="{StaticResource FormBlock}">
+						<Editor Text="{Binding Model.Detail}" Placeholder="Details" />
+					</StackLayout>
+
+				</StackLayout>
+			</ScrollView>
+
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+		</AbsoluteLayout>
+	</ContentPage.Content>
 </ContentPage>

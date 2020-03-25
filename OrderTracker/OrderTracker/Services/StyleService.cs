@@ -1,148 +1,255 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using System.Linq.Expressions;
+using Xamarin.Forms;
 
 namespace OrderTracker
 {
-    public class StyleService
-    {
-        private static readonly ResourceDictionary resources;
+	public class StyleService
+	{
+		private static readonly ResourceDictionary resources;
 
-        static StyleService()
-        {
-            if (resources == null)
-                resources = new ResourceDictionary();
-        }
+		static StyleService()
+		{
+			if (resources == null)
+				resources = new ResourceDictionary();
+		}
 
-        public static ResourceDictionary InitializeResources()
-        {
+		public static ResourceDictionary InitializeResources()
+		{
+			ImplicitStyles();
+			ExplicitStyles();
+			AddConverters();
+			return resources;
+		}
 
-            var TextInput = new Style(typeof(Entry))
-            {
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.CenterAndExpand}
-                }
-            };
-            Add(TextInput, nameof(TextInput));
+		private static void AddConverters()
+		{
+			resources.Add("Toggle", new ToggleConverter());
+		}
 
-            var TextLabel = new Style(typeof(Label))
-            {
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.Start},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.CenterAndExpand},
-                    new Setter{Property = Label.FontSizeProperty, Value = 14 },
-                    new Setter{Property = Label.FontAttributesProperty, Value = FontAttributes.Bold}
-                }
-            };
-            Add(TextLabel, nameof(TextLabel));
+		private static void ImplicitStyles()
+		{
+			var materialDesignBase = new Style(typeof(VisualElement))
+			{
+				Setters =
+				{
+					Setter(VisualElement.VisualProperty, VisualMarker.Material)
+				}
+			};
 
-            var Form = new Style(typeof(StackLayout))
-            {
+			resources.Add(new Style(typeof(Entry))
+			{
+				Setters =
+					 {
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.FillAndExpand),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.EndAndExpand),
+						Setter(VisualElement.BackgroundColorProperty, Color.Transparent),
+						Setter(Entry.PlaceholderColorProperty, Color.Accent)
+						
+					 },
+				BasedOn = materialDesignBase
+			}
+			);
 
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.Start},
-                    new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Vertical},
-                    new Setter{Property = Layout.PaddingProperty, Value = new Thickness(5,10)}
-                }
-            };
-            Add(Form, nameof(Form));
+			resources.Add(new Style(typeof(ActivityIndicator))
+			{
+				Setters =
+					{
+						Setter(VisualElement.BackgroundColorProperty, Color.Transparent),
+						Setter(ActivityIndicator.ColorProperty, Color.Accent),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0.5, 0, 100, 100)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional)
+					},
+				BasedOn = materialDesignBase
+			});
 
-            var FormBlock = new Style(typeof(StackLayout))
-            {
+			resources.Add(new Style(typeof(Label))
+			{
+				BasedOn = materialDesignBase,
+				Setters =
+				{
+					Setter(View.HorizontalOptionsProperty,LayoutOptions.StartAndExpand),
+					Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
+				}
+			});
 
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
-                    new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Horizontal},
-                    new Setter{Property= View.MarginProperty, Value= new Thickness(10)}
-                }
-            };
-            Add(FormBlock, nameof(FormBlock));
+			resources.Add(new Style(typeof(DatePicker))
+			{
+				Setters =
+					 {
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.FillAndExpand),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
+						Setter(DatePicker.DateProperty, DateTime.Now),
+						Setter(DatePicker.FormatProperty, Constants.DATE_FRMT),
+						Setter(DatePicker.TextColorProperty, Color.Accent),
+						Setter(VisualElement.BackgroundColorProperty, Color.White)
+					 },
+				BasedOn = materialDesignBase
+			});
 
-            var ListViewCell = new Style(typeof(StackLayout))
-            {
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
-                    new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Vertical},
-                    new Setter{Property= View.MarginProperty, Value= new Thickness(30)},
-                    new Setter{Property= Layout.PaddingProperty, Value= new Thickness(20,50)}
-                }
-            };
-            Add(ListViewCell, nameof(ListViewCell));
+			resources.Add(new Style(typeof(Button))
+			{
+				Setters =
+					 {
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.CenterAndExpand),
+						Setter(View.VerticalOptionsProperty,  LayoutOptions.Center),
+						Setter(VisualElement.BackgroundColorProperty, Color.Accent),
+						Setter(Button.TextColorProperty, Color.White),
+						Setter(View.MarginProperty, new Thickness(10)),
+						Setter(VisualElement.WidthRequestProperty, 200)
+					 },
+				BasedOn = materialDesignBase
+			});
 
-            var ListViewSubCell = new Style(typeof(StackLayout))
-            {
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.StartAndExpand},
-                    new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Horizontal}
-                }
-            };
-            Add(ListViewSubCell, nameof(ListViewSubCell));
+			resources.Add(new Style(typeof(Editor))
+			{
+				Setters =
+					 {
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.FillAndExpand),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.EndAndExpand),
+						Setter(VisualElement.BackgroundColorProperty, Color.Transparent),
+						Setter(Editor.PlaceholderColorProperty, Color.Accent),
+						Setter(Editor.AutoSizeProperty, EditorAutoSizeOption.TextChanges)
+					 },
+				BasedOn = materialDesignBase
+			}
+			);
 
-            var ListViewLabel = new Style(typeof(Label))
-            {
-                Setters =
-                {
-                    new Setter{Property = Label.FontAttributesProperty, Value= FontAttributes.Bold},
-                    new Setter{Property = Label.FontSizeProperty, Value = 14}
-                }
-            };
-            Add(ListViewLabel, nameof(ListViewLabel));
+			resources.Add(new Style(typeof(AbsoluteLayout))
+			{ 
+				Setters =
+				{
+					Setter(View.VerticalOptionsProperty, LayoutOptions.FillAndExpand)
+				}
+			});
 
-            var BaseButton = new Style(typeof(Button))
-            {
-                Setters =
-                {
-                    new Setter{Property= View.HorizontalOptionsProperty, Value= LayoutOptions.CenterAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.Center},
-                    new Setter{Property= VisualElement.BackgroundColorProperty, Value= Color.Accent},
-                    new Setter{Property= Button.TextColorProperty, Value= Color.White},
-                    new Setter{Property= View.MarginProperty, Value= new Thickness(10)},
-                    new Setter{Property= VisualElement.WidthRequestProperty, Value = 200}
-                }
-            };
-            Add(BaseButton, nameof(BaseButton));
+			resources.Add(new Style(typeof(CheckBox))
+			{
+				Setters =
+					{
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.CenterAndExpand),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
+						Setter(CheckBox.ColorProperty, Color.Accent),
+						Setter(VisualElement.VisualProperty, VisualMarker.Material)
+					}
+			});
+		}
 
-            var Date = new Style(typeof(DatePicker))
-            {
-                Setters =
-                {
-                    new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.CenterAndExpand}
-                }
-            };
-            Add(Date, nameof(Date));
+		private static void ExplicitStyles()
+		{
 
-            var ListViewLayout = new Style(typeof(ListView))
-            {
-                Setters=
-                {
-                    new Setter{Property= View.HorizontalOptionsProperty, Value= LayoutOptions.FillAndExpand},
-                    new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
-                    new Setter{Property= View.MarginProperty, Value= new Thickness(20)},
-                    new Setter{Property= ListView.HasUnevenRowsProperty, Value= false},
-                    new Setter{Property= ListView.SeparatorColorProperty, Value = Color.Accent},
-                    new Setter{Property= ListView.IsPullToRefreshEnabledProperty, Value= false}
-                }
-            };
-            Add(ListViewLayout, nameof(ListViewLayout));
+			var TextLabel = new Style(typeof(Label))
+			{
+				Setters =
+					 {
+						new Setter{Property = Label.FontSizeProperty, Value = 14 },
+						new Setter{Property = Label.FontAttributesProperty, Value = FontAttributes.Bold}
+					 }
+			};
+			Add(() => TextLabel);
 
-            return resources;
+			var TextLabelEnd = new Style(typeof(Label))
+			{
+				BasedOn = TextLabel,
+				Setters =
+						{
+							new Setter{Property = View.HorizontalOptionsProperty, Value= LayoutOptions.EndAndExpand},
+							new Setter{Property=View.MarginProperty, Value= new Thickness(10,0)}
+						}
+			};
+			Add(() => TextLabelEnd);
 
-        }
+			var Form = new Style(typeof(StackLayout))
+			{
 
-        private static void Add<T>(T data, string name)
-        {
-            resources.Add(name, data);
-        }
+				Setters =
+					 {
+						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+						new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Vertical},
+						new Setter{Property = Layout.PaddingProperty, Value = new Thickness(5,10)},
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, 1, AbsoluteLayout.AutoSize)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional | AbsoluteLayoutFlags.WidthProportional)
+					 }
+			};
+			Add(() => Form);
 
-    }
+			var FormBlock = new Style(typeof(StackLayout))
+			{
+
+				Setters =
+					 {
+						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+						new Setter{Property= StackLayout.OrientationProperty, Value= StackOrientation.Horizontal},
+						new Setter{Property= View.MarginProperty, Value= new Thickness(10)}
+					 }
+			};
+			Add(() => FormBlock);
+
+			var ListViewLayout = new Style(typeof(ListView))
+			{
+				Setters =
+					 {
+						new Setter{Property= View.HorizontalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+						new Setter{Property= View.MarginProperty, Value= new Thickness(20)},
+						new Setter{Property= ListView.HasUnevenRowsProperty, Value= false},
+						new Setter{Property= ListView.SeparatorVisibilityProperty, Value = false},
+						new Setter{Property= ListView.IsPullToRefreshEnabledProperty, Value= false},
+						new Setter{Property= ListView.RowHeightProperty, Value= 110},
+						new Setter{Property= ListView.SeparatorColorProperty, Value= Color.Transparent},
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional)
+					 }
+			};
+			Add(() => ListViewLayout);
+
+			var ListViewFrame = new Style(typeof(Frame))
+			{
+				Setters =
+					 {
+						new Setter{Property  = Frame.HasShadowProperty, Value= true},
+						new Setter{Property= Frame.CornerRadiusProperty, Value= 3},
+						new Setter{Property = Layout.PaddingProperty, Value= new Thickness(5)}
+					 }
+			};
+			Add(() => ListViewFrame);
+
+			var FormScroll = new Style(typeof(ScrollView))
+			{
+				Setters =
+					{
+						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, 1, AbsoluteLayout.AutoSize)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional | AbsoluteLayoutFlags.WidthProportional)
+					}
+			};
+			Add(() => FormScroll);
+
+			var AppLabel = new Style(typeof(Label))
+			{
+				Setters =
+				{
+					Setter(View.HorizontalOptionsProperty,LayoutOptions.StartAndExpand),
+					Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
+					Setter(Label.FontAttributesProperty, FontAttributes.Bold),
+					Setter(Label.FontSizeProperty, 14)
+				}
+			};
+
+			Add(() => AppLabel);
+		}
+
+		private static void Add(Expression<Func<Style>> style)
+		{
+			var styleInfo = style.GetMemberInfo();
+			resources.Add(styleInfo.Name, style?.Compile().Invoke());
+		}
+
+		private static Setter Setter(BindableProperty property, object value) => new Setter { Property = property, Value = value };
+
+	}
 }

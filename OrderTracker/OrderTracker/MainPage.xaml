@@ -7,39 +7,46 @@
              x:Class="OrderTracker.MainPage"
              Title="Order Tracker">
 
-    <ContentPage.ToolbarItems >
-        <ToolbarItem Text="ADD ORDER" Order="Primary" Command="{Binding AddOrderCommand}" />
-    </ContentPage.ToolbarItems>
-    <StackLayout Style="{StaticResource Form}">
-        <!-- Place new controls here -->
-        <StackLayout  Style="{StaticResource FormBlock}">
-            <Label Text="Clone Number : "  Style="{StaticResource TextLabel}" />
-            <Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}"  Style="{StaticResource TextInput}" />
-        </StackLayout>
+	<ContentPage.ToolbarItems >
+		<ToolbarItem Text="ADD ORDER" Order="Primary" Command="{Binding AddOrderCommand}" />
+	</ContentPage.ToolbarItems>
 
-        <StackLayout  Style="{StaticResource FormBlock}">
-            <Label Text="Tracking Number : "  Style="{StaticResource TextLabel}" />
-            <Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}"  Style="{StaticResource TextInput}" />
-        </StackLayout>
+	<ContentPage.Content>
+		<AbsoluteLayout x:Name="absLayout">
+			<ScrollView Style="{StaticResource FormScroll}">
+				<StackLayout Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" >
+					<!-- Place new controls here -->
+					<StackLayout  Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Placeholder="Clone Number" />
+					</StackLayout>
 
-        <StackLayout  Style="{StaticResource FormBlock}">
-            <Label Text="Phone Number : "  Style="{StaticResource TextLabel}" />
-            <Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}"  Style="{StaticResource TextInput}" />
-        </StackLayout>
+					<StackLayout  Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Placeholder="Tracking Number" />
+					</StackLayout>
 
-        <StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-            <Button Text="Search" Command="{Binding SearchCommand}" Style="{StaticResource BaseButton}" />
-        </StackLayout>
+					<StackLayout  Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Placeholder="Mobile Number" />
+					</StackLayout>
 
-        <StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-            <Button Text="Backup Data" Command="{Binding BackupCommand}" Style="{StaticResource BaseButton}" />
-        </StackLayout>
+					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+						<Button Text="Search" Command="{Binding SearchCommand}" />
+					</StackLayout>
 
-        <!--<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-            <Button Text="Restore Data" Command="{Binding RestoreCommand}" Style="{StaticResource BaseButton}" />
-        </StackLayout>-->
+					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+						<Button Text="Backup Data" Command="{Binding BackupCommand}" />
+					</StackLayout>
 
-        <ActivityIndicator IsRunning="{Binding IsBusy}" />
-    </StackLayout>
+					<!--<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+							<Button Text="Restore Data" Command="{Binding RestoreCommand}" />
+						</StackLayout>-->
+					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+						<Button Text="Add Application" Command="{Binding AddAppCommand}" />
+					</StackLayout>
 
+				</StackLayout>
+			</ScrollView>
+
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+		</AbsoluteLayout>
+	</ContentPage.Content>
 </ContentPage>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OrderTracker.Views.AddApp">
+
+	<ContentPage.Content>
+		<AbsoluteLayout>
+			<ScrollView Style="{StaticResource FormScroll}">
+				<StackLayout  Style="{StaticResource Form}" IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
+
+					<StackLayout Style="{StaticResource FormBlock}">
+						<Entry Text="{Binding Model.Name}" Placeholder="Application Name" />
+					</StackLayout>
+
+					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+						<Button Text="Add App" Command="{Binding AddAppNameCommand}" />
+					</StackLayout>
+
+					<BoxView Color="Transparent" HeightRequest="100" HorizontalOptions="FillAndExpand" />
+
+					<StackLayout Style="{StaticResource FormBlock}">
+						<ListView ItemsSource="{Binding AppList}">
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<ViewCell>
+										<StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+											<Label Text="{Binding Id}"  Margin="20,5,1,5" Style="{Binding AppLabel}"/>
+											<Label Text=":" Style="{Binding AppLabel}"/>
+											<Label Text="{Binding Name}" Margin="20,5" Style="{Binding AppLabel}"/>
+										</StackLayout>
+									</ViewCell>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</StackLayout>
+				</StackLayout>
+			</ScrollView>
+
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+		</AbsoluteLayout>
+	</ContentPage.Content>
+</ContentPage>

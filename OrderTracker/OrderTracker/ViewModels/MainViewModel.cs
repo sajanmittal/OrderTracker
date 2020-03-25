@@ -6,32 +6,25 @@ using Xamarin.Forms;
 
 namespace OrderTracker
 {
-    public class MainViewModel : BaseViewModel<SearchItem>
+    public class MainViewModel : ViewModelBase<SearchItem>
     {
-        public MainViewModel(INavigation navigation, Page page) : base(navigation, page)
+        public MainViewModel(Page page) : base( page)
         {
             SearchCommand = new Command(async () => await SearchAsync());
-            AddOrderCommand = new Command(async () => await AddOrder());
+            AddOrderCommand = new Command(async () => await PushAsync<AddOrder>());
             BackupCommand = new Command(async () => await BackupData());
             RestoreCommand = new Command(async () => await RestoreData());
+         AddAppCommand = new Command(async () => await PushAsync<AddApp>());
         }
 
         public ICommand SearchCommand { get; private set; }
 
         private async Task SearchAsync()
         {
-            await RunAsync(async () => { await Navigation.PushAsync(new OrderList(Model)); });
+            await RunAsync(async () => { await Page.Navigation.PushAsync(new OrderList(Model)); });
         }
 
         public ICommand AddOrderCommand { get; private set; }
-
-        public async Task AddOrder()
-        {
-            await RunAsync(async () =>
-            {
-                await Navigation.PushAsync(new AddOrder());
-            });
-        }
 
         public ICommand BackupCommand { get; private set; }
 
@@ -45,10 +38,6 @@ namespace OrderTracker
 
                if (backupDataCheck)
                {
-                   var password = await Page.DisplayPromptAsync("Backup Data Password", "Please enter password to restore data", "Submit", "Cancel", "Password", 8, Keyboard.Text);
-                   if (password != Constants.RESTORE_DATA_PASSWORD)
-                       throw new Exception("Incorrect Password");
-
                    status = await BackupService.BackupData();
                }
             },
@@ -83,10 +72,6 @@ namespace OrderTracker
 
                 if (restoreDataCheck)
                 {
-                    var password = await Page.DisplayPromptAsync("Restore Data Password", "Please enter password to restore data", "Submit", "Cancel", "Password", 8, Keyboard.Text);
-                    if (password != Constants.RESTORE_DATA_PASSWORD)
-                        throw new Exception("Incorrect Password");
-
                     status = await BackupService.RestoreData();
                 }
             },
@@ -107,5 +92,8 @@ namespace OrderTracker
             }
 
         }
+
+        public Command AddAppCommand { get; private set; }
+
     }
 }

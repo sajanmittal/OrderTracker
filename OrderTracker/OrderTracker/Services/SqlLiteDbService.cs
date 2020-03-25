@@ -46,7 +46,7 @@ namespace OrderTracker
             }
         }
 
-        private Type[] TablesList => new Type[] { typeof(Setting), typeof(Order) };
+        private Type[] TablesList => new Type[] { typeof(Setting), typeof(Order), typeof(AppName) };
 
 
         public async Task<List<T>> SelectAsync<T>(Expression<Func<T, bool>> predicate = null) where T : BaseModel, new()
