@@ -42,18 +42,13 @@ namespace OrderTracker
 				PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => x.GetCustomAttribute<IgnoreAttribute>() == null).ToArray();
 				foreach (PropertyInfo prop in Props)
 				{
-					dataTable.Columns.Add(new DataColumn(prop.Name, prop.PropertyType.GetNullableType()));
+						dataTable.Columns.Add(new DataColumn(prop.Name, prop.PropertyType.IsEnum ? typeof(string) : prop.PropertyType.GetNullableType()));
 				}
 				foreach (T item in items)
 				{
 					DataRow row = dataTable.NewRow();
 					foreach (var prop in Props)
-					{
-						if (!IsNullableType(prop.PropertyType))
-							row[prop.Name] = prop.GetValue(item, null);
-						else
-							row[prop.Name] = (prop.GetValue(item, null) ?? DBNull.Value);
-					}
+							row[prop.Name] = IsNullableType(prop.PropertyType) ? (prop.GetValue(item) ?? DBNull.Value) : prop.GetValue(item);
 
 					dataTable.Rows.Add(row);
 				}
@@ -87,6 +82,28 @@ namespace OrderTracker
 			foreach (T item in data)
 			{
 				collection.Add(item);
+			}
+		}
+
+		public static async Task ForEachAsync<T>(this ObservableCollection<T> collection, Func<T, Task> action)
+		{
+			if(collection.Any())
+			{
+				foreach(T data in collection)
+				{
+					await action(data);
+				}
+			}
+		}
+
+		public static  void ForEach<T>(this ObservableCollection<T> collection, Action<T> action)
+		{
+			if (collection.Any())
+			{
+				foreach (T data in collection)
+				{
+					action(data);
+				}
 			}
 		}
 

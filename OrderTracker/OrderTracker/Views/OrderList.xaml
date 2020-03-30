@@ -4,7 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="OrderTracker.Views.OrderList">
+             x:Class="OrderTracker.Views.OrderList"
+				 Title="Orders">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}"/>
 	</ContentPage.ToolbarItems>
@@ -28,7 +29,7 @@
 											<ColumnDefinition Width="60"/>
 											<ColumnDefinition Width="Auto"/>
 											<ColumnDefinition Width="Auto"/>
-											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="*"/>
 										</Grid.ColumnDefinitions>
 
 										<Image Source="order.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" HorizontalOptions="Center" VerticalOptions="Center" />

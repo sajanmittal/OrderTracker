@@ -45,7 +45,7 @@ namespace OrderTracker
 						Setter(View.VerticalOptionsProperty, LayoutOptions.EndAndExpand),
 						Setter(VisualElement.BackgroundColorProperty, Color.Transparent),
 						Setter(Entry.PlaceholderColorProperty, Color.Accent)
-						
+
 					 },
 				BasedOn = materialDesignBase
 			}
@@ -117,11 +117,13 @@ namespace OrderTracker
 			);
 
 			resources.Add(new Style(typeof(AbsoluteLayout))
-			{ 
+			{
 				Setters =
 				{
 					Setter(View.VerticalOptionsProperty, LayoutOptions.FillAndExpand)
-				}
+				},
+				BasedOn = materialDesignBase
+
 			});
 
 			resources.Add(new Style(typeof(CheckBox))
@@ -130,9 +132,21 @@ namespace OrderTracker
 					{
 						Setter(View.HorizontalOptionsProperty, LayoutOptions.CenterAndExpand),
 						Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
-						Setter(CheckBox.ColorProperty, Color.Accent),
-						Setter(VisualElement.VisualProperty, VisualMarker.Material)
-					}
+						Setter(CheckBox.ColorProperty, Color.Accent)
+					},
+				BasedOn = materialDesignBase
+			});
+
+			resources.Add(new Style(typeof(SearchBar))
+			{
+				Setters =
+					{
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.FillAndExpand),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.StartAndExpand),
+						Setter(SearchBar.CancelButtonColorProperty, Color.Accent),
+						Setter(SearchBar.PlaceholderColorProperty, Color.Accent)
+					},
+				BasedOn = materialDesignBase
 			});
 		}
 
@@ -236,7 +250,7 @@ namespace OrderTracker
 					Setter(View.HorizontalOptionsProperty,LayoutOptions.StartAndExpand),
 					Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
 					Setter(Label.FontAttributesProperty, FontAttributes.Bold),
-					Setter(Label.FontSizeProperty, 14)
+					Setter(Label.FontSizeProperty, 18)
 				}
 			};
 

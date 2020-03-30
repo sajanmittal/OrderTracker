@@ -8,7 +8,7 @@
              Title="Add Order">
 
 	<ContentPage.ToolbarItems >
-		<ToolbarItem Text="SAVE" Order="Primary" Command="{Binding SaveCommand}" />
+		<ToolbarItem Text="Search" Order="Primary" Clicked="Search_Clicked" x:Name="SearchButton" />
 	</ContentPage.ToolbarItems>
 
 	<ContentPage.Content>
@@ -35,6 +35,10 @@
 
 					<StackLayout Style="{StaticResource FormBlock}">
 						<Editor Text="{Binding Model.Detail}" Placeholder="Details" />
+					</StackLayout>
+
+					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+						<Button Text="Save Order" Command="{Binding SaveCommand}" />
 					</StackLayout>
 
 				</StackLayout>

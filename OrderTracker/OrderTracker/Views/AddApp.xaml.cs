@@ -13,10 +13,12 @@ namespace OrderTracker.Views
 			InitializeComponent();
 			if (viewModel == null)
 				viewModel = new AppNameViewModel(this);
+
+			BindingContext = viewModel;
 		}
 		protected override void OnAppearing()
 		{
-			viewModel.GetAppsCommand?.Execute(null);
+			viewModel.GetAppsCommand?.Execute(this);
 			base.OnAppearing();
 		}
 	}

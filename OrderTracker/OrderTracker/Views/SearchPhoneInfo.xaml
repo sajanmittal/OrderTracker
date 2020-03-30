@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OrderTracker.Views.SearchPhoneInfo"
+				 Title="Search Phone Information">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}"/>
+	</ContentPage.ToolbarItems>
+
+	<ContentPage.Content>
+        <StackLayout>
+			<AbsoluteLayout x:Name="absLayout">
+				<Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+					<Grid.RowDefinitions>
+						<RowDefinition Height="50"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+				<SearchBar Placeholder="Phone Number" TextChanged="PhoneSearchBar_TextChanged" Grid.Row="0"/>
+					<ListView x:Name="PhoneListView" ItemsSource="{Binding PhoneInfoList}" Style="{StaticResource ListViewLayout}" HeightRequest="{Binding Path=Height, Source={x:Reference absLayout}}" Grid.Row="1">
+					<!--Built in Cells-->
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<ContentView Margin="5">
+									<Frame Style="{StaticResource ListViewFrame}">
+										<Grid Padding="5">
+											<Grid.RowDefinitions>
+												<RowDefinition Height="*"/>
+												<RowDefinition Height="*"/>
+											</Grid.RowDefinitions>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="60"/>
+												<ColumnDefinition Width="Auto"/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+
+											<Image Source="sim_icon.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit"/>
+
+											<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" />
+											<Label Text="{Binding Company}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" />
+											<Label Text="{Binding ExpiryDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextLabel}" />
+
+										</Grid>
+									</Frame>
+								</ContentView>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+				</Grid>
+				<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+			</AbsoluteLayout>
+		</StackLayout>
+    </ContentPage.Content>
+</ContentPage>

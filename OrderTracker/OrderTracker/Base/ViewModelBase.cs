@@ -4,11 +4,11 @@ using Xamarin.Forms;
 
 namespace OrderTracker
 {
-	public abstract class ViewModelBase<T> : BaseViewModel where T : BaseModel, new()
+	public abstract class ViewModelBase<T> : BaseViewModel where T : IBaseModel, new()
 	{
 		public ViewModelBase( Page page)
 		{
-			Page = page;
+			BindingPage = page;
 			if (model == null)
 				ResetModel();
 		}
@@ -23,10 +23,10 @@ namespace OrderTracker
 
 		private Page page;
 
-		public Page Page
+		public Page BindingPage
 		{
 			get => page;
-			set => SetProperty(ref page, value, nameof(Page));
+			set => SetProperty(ref page, value, nameof(BindingPage));
 		}
 
 		protected void ResetModel()
@@ -34,41 +34,21 @@ namespace OrderTracker
 			Model = new T();
 		}
 
-		public async Task RunAsync(Func<Task> action, Action<Exception> catchHandler = null, Action finalHadler = null)
-		{
-			try
-			{
-				if (!IsBusy)
-				{
-					IsBusy = true;
-					await action?.Invoke();
-				}
-			}
-			catch (Exception ex)
-			{
-				LoggerService.LogError(ex);
-				catchHandler?.Invoke(ex);
-			}
-			finally
-			{
-				finalHadler?.Invoke();
-				IsBusy = false;
-			}
-		}
-
 		public async Task PushAsync<P>() where P : Page, new()
 		{
-			await RunAsync(async () => {
-				await Page.Navigation.PushAsync(new P());
-			});
+			await PushAsync(new P());
+		}
+
+		public async Task PushAsync(Page page)
+		{
+				await BindingPage.Navigation.PushAsync(page);
 		}
 
 		public async Task PopAsync()
 		{
-			await RunAsync(async () => {
-				await Page.Navigation.PopAsync();
-			});
+				await BindingPage.Navigation.PopAsync();
 		}
 
+		public DateTime Today => DateTime.Today;
 	}
 }

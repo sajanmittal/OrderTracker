@@ -4,14 +4,15 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="OrderTracker.Views.AddApp">
+             x:Class="OrderTracker.Views.AddApp"
+				 Title="Add Application">
 
 	<ContentPage.Content>
 		<AbsoluteLayout>
 			<ScrollView Style="{StaticResource FormScroll}">
 				<StackLayout  Style="{StaticResource Form}" IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
 
-					<StackLayout Style="{StaticResource FormBlock}">
+					<StackLayout Style="{StaticResource FormBlock}" VerticalOptions="StartAndExpand">
 						<Entry Text="{Binding Model.Name}" Placeholder="Application Name" />
 					</StackLayout>
 
@@ -19,23 +20,32 @@
 						<Button Text="Add App" Command="{Binding AddAppNameCommand}" />
 					</StackLayout>
 
-					<BoxView Color="Transparent" HeightRequest="100" HorizontalOptions="FillAndExpand" />
+					<BoxView Color="Transparent" HeightRequest="50" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" />
 
-					<StackLayout Style="{StaticResource FormBlock}">
-						<ListView ItemsSource="{Binding AppList}">
-							<ListView.ItemTemplate>
-								<DataTemplate>
-									<ViewCell>
-										<StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-											<Label Text="{Binding Id}"  Margin="20,5,1,5" Style="{Binding AppLabel}"/>
-											<Label Text=":" Style="{Binding AppLabel}"/>
-											<Label Text="{Binding Name}" Margin="20,5" Style="{Binding AppLabel}"/>
-										</StackLayout>
-									</ViewCell>
-								</DataTemplate>
-							</ListView.ItemTemplate>
-						</ListView>
-					</StackLayout>
+					<ListView ItemsSource="{Binding AppList}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" >
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<ViewCell IsEnabled="False">
+									<ContentView>
+										<Grid>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="70"/>
+											</Grid.RowDefinitions>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="60"/>
+												<ColumnDefinition Width="10"/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+
+											<Label Text="{Binding Id}" Style="{StaticResource AppLabel}" HorizontalOptions="EndAndExpand" Grid.Column="0" />
+											<Label Text=":" Style="{StaticResource AppLabel}" Grid.Column="1" />
+											<Label Text="{Binding Name}"  Style="{StaticResource AppLabel}" Grid.Column="2" />
+										</Grid>
+									</ContentView>
+								</ViewCell>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+					</ListView>
 				</StackLayout>
 			</ScrollView>
 

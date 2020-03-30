@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace OrderTracker
 {
@@ -32,6 +33,28 @@ namespace OrderTracker
 			storage = value;
 			OnPropertyChanged(propertyName);
 			return true;
+		}
+
+		public async Task RunAsync(Func<Task> action, Action<Exception> catchHandler = null, Action finalHadler = null)
+		{
+			try
+			{
+				if (!IsBusy)
+				{
+					IsBusy = true;
+					await action?.Invoke();
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerService.LogError(ex);
+				catchHandler?.Invoke(ex);
+			}
+			finally
+			{
+				finalHadler?.Invoke();
+				IsBusy = false;
+			}
 		}
 	}
 }

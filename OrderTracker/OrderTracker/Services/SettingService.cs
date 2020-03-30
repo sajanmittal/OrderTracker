@@ -12,7 +12,7 @@ namespace OrderTracker
 
         public async static Task<T> GetSettingValue<T>(string settingName) 
         {
-            var setting = await App.DbService.FirstOrDefault<Setting>(x => x.SettingName == settingName);
+            var setting = await App.DbService.FirstOrDefaultAsync<Setting>(x => x.SettingName == settingName);
             if (setting == null || string.IsNullOrEmpty(setting.SettingValue))
                 return default;
 
@@ -21,7 +21,7 @@ namespace OrderTracker
 
         public async static Task<Setting> GetSetting(string settingName)
         {
-            return await App.DbService.FirstOrDefault<Setting>(x => x.SettingName == settingName);
+            return await App.DbService.FirstOrDefaultAsync<Setting>(x => x.SettingName == settingName);
         }
 
     }

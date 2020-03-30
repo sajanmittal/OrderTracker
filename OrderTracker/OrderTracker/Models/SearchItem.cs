@@ -1,6 +1,6 @@
 ﻿namespace OrderTracker
 {
-    public class SearchItem : BaseModel
+    public class SearchItem : IBaseModel
     {
         public string TrackingNo { get; set; }
 

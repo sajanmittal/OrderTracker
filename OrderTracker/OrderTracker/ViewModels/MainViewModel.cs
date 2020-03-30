@@ -1,99 +1,106 @@
 ﻿using OrderTracker.Views;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace OrderTracker
 {
-    public class MainViewModel : ViewModelBase<SearchItem>
-    {
-        public MainViewModel(Page page) : base( page)
-        {
-            SearchCommand = new Command(async () => await SearchAsync());
-            AddOrderCommand = new Command(async () => await PushAsync<AddOrder>());
-            BackupCommand = new Command(async () => await BackupData());
-            RestoreCommand = new Command(async () => await RestoreData());
-         AddAppCommand = new Command(async () => await PushAsync<AddApp>());
-        }
+   public class MainViewModel : ViewModelBase<EmptyModel>
+   {
+      public MainViewModel(Page page) : base(page)
+      {
+         BackupCommand = new Command(async () => await BackupData());
+         RestoreCommand = new Command(async () => await RestoreData());
+      }
 
-        public ICommand SearchCommand { get; private set; }
+      public ICommand BackupCommand { get; private set; }
 
-        private async Task SearchAsync()
-        {
-            await RunAsync(async () => { await Page.Navigation.PushAsync(new OrderList(Model)); });
-        }
+      private async Task BackupData()
+      {
+         Enums.BackupRestoreStatus status = Enums.BackupRestoreStatus.Processing;
 
-        public ICommand AddOrderCommand { get; private set; }
+         await RunAsync(async () => {
 
-        public ICommand BackupCommand { get; private set; }
+            var backupDataCheck = await BindingPage.DisplayAlert("Are you sure you want to backup data?", "Click yes to confirm", "Yes, I am Sure", "Cancel");
 
-        private async Task BackupData()
-        {
-            BackupRestoreStatus status = BackupRestoreStatus.Processing;
-
-           await RunAsync(async () => {
-
-               var backupDataCheck = await Page.DisplayAlert("Are you sure you want to backup data?", "Click yes to confirm", "Yes, I am Sure", "Cancel");
-
-               if (backupDataCheck)
-               {
-                   status = await BackupService.BackupData();
-               }
-            },
-            (ex) => {
-                status = BackupRestoreStatus.Failed;
-            });
-
-            switch(status)
+            if (backupDataCheck)
             {
-                case BackupRestoreStatus.Sucess:
-                    LoggerService.LogInformation("Backup Success");
-                    break;
-                case BackupRestoreStatus.Failed:
-                    LoggerService.LogInformation("Backup Failed");
-                    break;
+               List<IBackupModule> backupModules = new List<IBackupModule>() {
+                  new BackupModule<Order>(),
+                  new BackupModule<PhoneInformation>(),
+                  new BackupModule<PhoneAppLink>(),
+                  new BackupModule<AppName>(),
+                  new BackupModule<Setting>(),
+                 };
+
+               status = await BackupService.BackupData(backupModules);
             }
-        }
+         },
+          (ex) => {
+             status = Enums.BackupRestoreStatus.Failed;
+          });
 
-        public ICommand RestoreCommand { get; private set; }
+         switch (status)
+         {
+            case Enums.BackupRestoreStatus.Sucess:
+               LoggerService.LogInformation("Backup Success");
+               break;
+            case Enums.BackupRestoreStatus.Failed:
+               LoggerService.LogInformation("Backup Failed");
+               break;
+         }
+      }
 
-        private async Task RestoreData()
-        {
-            BackupRestoreStatus status = BackupRestoreStatus.Processing;
+      public ICommand RestoreCommand { get; private set; }
 
-            await RunAsync(async () =>
+      private async Task RestoreData()
+      {
+         Enums.BackupRestoreStatus status = Enums.BackupRestoreStatus.Processing;
+
+         await RunAsync(async () =>
+         {
+            var setting = await SettingService.GetSettingValue<bool>(Constants.RESTORE_SETTING_KEY);
+            if (setting)
+               throw new Exception("Data already restored!");
+
+            var restoreDataCheck = await BindingPage.DisplayAlert("Are you sure you want to restore data?", "Quation: Restoring wrongly may cause duplicate entries", "Yes, I am Sure", "Cancel");
+
+            if (restoreDataCheck)
             {
-                var setting =await SettingService.GetSettingValue<bool>(Constants.RESTORE_SETTING_KEY);
-                if (setting)
-                    throw new Exception("Data already restored!");
-
-                var restoreDataCheck =await Page.DisplayAlert("Are you sure you want to restore data?", "Quation: Restoring wrongly may cause duplicate entries", "Yes, I am Sure", "Cancel");
-
-                if (restoreDataCheck)
-                {
-                    status = await BackupService.RestoreData();
-                }
-            },
-            (ex) => {
-                status = BackupRestoreStatus.Failed;
-            });
-
-            switch (status)
-            {
-                case BackupRestoreStatus.Sucess:
-                    LoggerService.LogInformation("Data Restored Successfully");
-                    break;
-                case BackupRestoreStatus.Failed:
-                    LoggerService.LogInformation("Restore Failed");
-                    break;
-                case BackupRestoreStatus.Processing:
-                    break;
+               status = await BackupService.RestoreData();
             }
+         },
+         (ex) => {
+            status = Enums.BackupRestoreStatus.Failed;
+         });
 
-        }
+         switch (status)
+         {
+            case Enums.BackupRestoreStatus.Sucess:
+               LoggerService.LogInformation("Data Restored Successfully");
+               break;
+            case Enums.BackupRestoreStatus.Failed:
+               LoggerService.LogInformation("Restore Failed");
+               break;
+            case Enums.BackupRestoreStatus.Processing:
+               break;
+         }
 
-        public Command AddAppCommand { get; private set; }
+      }
+
+
+      public List<IPassApplication> GetApplications()
+      {
+         return new List<IPassApplication>
+         {
+            new PassPageApplication<AddOrder>(this){ Name= "Order Tracker", Image = "order_tracker"},
+            new PassPageApplication<AddPhoneInfo>(this){Name="Phone Info", Image="sim_icon"},
+            new PassPageApplication<AddApp>(this){Name="App Info", Image="app_info"},
+            new PassApplication{Name = "Backup Data", Image = "backup", Command = BackupCommand}
+         };
+      }
 
     }
 }

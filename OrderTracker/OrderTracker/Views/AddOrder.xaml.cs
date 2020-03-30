@@ -29,5 +29,17 @@ namespace OrderTracker.Views
 
 			BindingContext = viewModel;
 		}
+
+
+		protected override void OnAppearing()
+		{
+			SearchButton.IsEnabled = !viewModel.isEditPage;
+			base.OnAppearing();
+		}
+
+		private async void Search_Clicked(object sender, EventArgs e)
+		{
+			await viewModel.PushAsync<SearchOrder>();
+		}
 	}
 }

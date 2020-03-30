@@ -10,7 +10,7 @@ namespace OrderTracker
     public class LocalReportService : IReportService
     {
 
-        public async Task<ReportGenResponse> Generate<T>(IEnumerable<T> data, string fileName) where T : BaseModel
+        public async Task<ReportGenResponse> Generate<T>(IEnumerable<T> data, string fileName)
         {
          ReportGenResponse response = ReportGenResponse.Empty;
 
@@ -25,7 +25,7 @@ namespace OrderTracker
             return response;
         }
 
-        public async Task<ReportGenResponse> Generate<TKey, TData>(IEnumerable<IGrouping<TKey, TData>> groupedData, string fileName) where TData : BaseModel
+        public async Task<ReportGenResponse> Generate<TKey, TData>(IEnumerable<IGrouping<TKey, TData>> groupedData, string fileName)
         {
          ReportGenResponse response = ReportGenResponse.Empty;
 

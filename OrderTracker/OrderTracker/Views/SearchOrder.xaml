@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OrderTracker.Views.SearchOrder"
+				 Title="Search Order">
+    <ContentPage.Content>
+		<AbsoluteLayout>
+			<ScrollView Style="{StaticResource FormScroll}">
+				<StackLayout Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" >
+					<StackLayout  Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Placeholder="Clone Number" />
+					</StackLayout>
+
+					<StackLayout  Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Placeholder="Tracking Number" />
+					</StackLayout>
+
+					<StackLayout  Style="{StaticResource FormBlock}">
+						<Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Placeholder="Mobile Number" />
+					</StackLayout>
+
+					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+						<Button Text="Search" Command="{Binding SearchCommand}" />
+					</StackLayout>
+				</StackLayout>
+			</ScrollView>
+		</AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

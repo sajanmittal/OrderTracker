@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OrderTracker
 {
@@ -22,5 +19,8 @@ namespace OrderTracker
 		[Ignore]
 		[JsonIgnore]
 		public override int Id => AppNameId;
+
+		[Ignore]
+		public bool IsSelected { get; set; }
 	}
 }

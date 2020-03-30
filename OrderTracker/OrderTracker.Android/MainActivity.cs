@@ -10,7 +10,7 @@ using EPlatform = Xamarin.Essentials.Platform;
 
 namespace OrderTracker.Droid
 {
-	[Activity(Label = "Order Tracker", Theme = "@style/MainTheme", Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
+	[Activity(Label = "Order Manager", Theme = "@style/MainTheme", Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : FormsAppCompatActivity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)

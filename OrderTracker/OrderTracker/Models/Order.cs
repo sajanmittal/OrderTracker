@@ -28,7 +28,7 @@ namespace OrderTracker
 
         public DateTime OrderDate { get; set; }
 
-        public OrderStatus Status { get; set; }
+        public Enums.OrderStatus Status { get; set; }
 
         public string CloneNo { get; set; }
         [Ignore]

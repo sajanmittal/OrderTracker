@@ -5,48 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="OrderTracker.MainPage"
-             Title="Order Tracker">
-
-	<ContentPage.ToolbarItems >
-		<ToolbarItem Text="ADD ORDER" Order="Primary" Command="{Binding AddOrderCommand}" />
-	</ContentPage.ToolbarItems>
+             Title="Order Manager">
 
 	<ContentPage.Content>
 		<AbsoluteLayout x:Name="absLayout">
 			<ScrollView Style="{StaticResource FormScroll}">
-				<StackLayout Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" >
-					<!-- Place new controls here -->
-					<StackLayout  Style="{StaticResource FormBlock}">
-						<Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Placeholder="Clone Number" />
-					</StackLayout>
-
-					<StackLayout  Style="{StaticResource FormBlock}">
-						<Entry Keyboard="Numeric" Text="{Binding Model.TrackingNo}" Placeholder="Tracking Number" />
-					</StackLayout>
-
-					<StackLayout  Style="{StaticResource FormBlock}">
-						<Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Placeholder="Mobile Number" />
-					</StackLayout>
-
-					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-						<Button Text="Search" Command="{Binding SearchCommand}" />
-					</StackLayout>
-
-					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-						<Button Text="Backup Data" Command="{Binding BackupCommand}" />
-					</StackLayout>
-
-					<!--<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-							<Button Text="Restore Data" Command="{Binding RestoreCommand}" />
-						</StackLayout>-->
-					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-						<Button Text="Add Application" Command="{Binding AddAppCommand}" />
-					</StackLayout>
-
-				</StackLayout>
+				<StackLayout x:Name="BaseStackLayout" Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" Orientation="Vertical" FlowDirection="LeftToRight" />
 			</ScrollView>
 
-			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" AbsoluteLayout.LayoutBounds="0.5,0.5,100,100" />
 		</AbsoluteLayout>
 	</ContentPage.Content>
 </ContentPage>

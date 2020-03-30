@@ -13,9 +13,9 @@ namespace OrderTracker
 	public class OrderViewModel : ViewModelBase<Order>
 	{
 
-		public OrderViewModel(Page page, bool isEditPage = false) : base( page)
+		public OrderViewModel(Page page, bool isEditPage = false) : base(page)
 		{
-			SaveCommand = new Command(async () => await SaveOrder(), CanSaveOrder);
+			SaveCommand = new Command(async () => await SaveOrder());
 			GetSearchDataCommand = new Command<SearchItem>(async (data) => await GetSearchData(data));
 			ItemTapped = new Command<Order>(async (order) => await UpdateStatus(order));
 			GenerateReportCommad = new Command(async () => await DownloadReport());
@@ -25,25 +25,21 @@ namespace OrderTracker
 
 		}
 
-		protected bool isEditPage;
+		public readonly bool isEditPage;
 
 		public ICommand SaveCommand { get; set; }
-
-		private bool CanSaveOrder()
-		{
-			if (string.IsNullOrWhiteSpace(Model.PhoneNo) || Model.OrderDate == null || string.IsNullOrWhiteSpace(Model.CloneNo))
-			{
-				LoggerService.LogError(new Exception("All required information is not provided"));
-				return false;
-			}
-			return true;
-		}
 
 		private async Task SaveOrder()
 		{
 			await RunAsync(async () =>
 			{
-					if(isEditPage)
+				if (string.IsNullOrWhiteSpace(Model.PhoneNo) || Model.OrderDate == null || string.IsNullOrWhiteSpace(Model.CloneNo))
+				{
+					LoggerService.LogError(new Exception("All required information is not provided"));
+					return;
+				}
+
+				if (isEditPage)
 						await UpdateOrder();
 					else
 						await AddNewOrder();
@@ -67,7 +63,7 @@ namespace OrderTracker
 
 				List<Order> result = new List<Order>();
 
-				var query = (await App.DbService.SelectAsync<Order>(x => x.Status == OrderStatus.Pending)).AsQueryable();
+				var query = (await App.DbService.SelectAsync<Order>(x => x.Status == Enums.OrderStatus.Pending)).AsQueryable();
 
 				if (!string.IsNullOrWhiteSpace(searchItem.CloneNo))
 				{
@@ -110,23 +106,23 @@ namespace OrderTracker
 			await RunAsync(async () =>
 			{
 				Model = item;
-				var updateStatus = await Page.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", "Update Record");
+				var updateStatus = await BindingPage.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", "Update Record");
 
 				switch (updateStatus)
 				{
 					case "Cancel":
 						return;
 					case "Received":
-						item.Status = OrderStatus.Received;
+						item.Status = Enums.OrderStatus.Received;
 						await UpdateItemStatus(item);
 						break;
 					case "Cancelled":
-						item.Status = OrderStatus.Cancelled;
+						item.Status = Enums.OrderStatus.Cancelled;
 						await UpdateItemStatus(item);
 						break;
 					case "Update Record":
 						{
-							await Page.Navigation.PushAsync(new AddOrder(item));
+							await PushAsync(new AddOrder(item));
 							break;
 						}
 				}
@@ -159,11 +155,11 @@ namespace OrderTracker
 
 		private async Task AddNewOrder()
 		{
-			Model.Status = OrderStatus.Pending;
+			Model.Status = Enums.OrderStatus.Pending;
 			int records = await App.DbService.InsertAsync(Model);
 			if (records > 0)
 			{
-				var option = await Page.DisplayAlert(Constants.SAVED_MSG, Constants.SAVE_OTHER_MSG, "ADD MORE", "GO BACK");
+				var option = await BindingPage.DisplayAlert(Constants.SAVED_MSG, Constants.SAVE_OTHER_MSG, "ADD MORE", "GO BACK");
 				if (option)
 				{
 					ResetModel();
