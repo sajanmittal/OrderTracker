@@ -22,11 +22,11 @@
 						<Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Placeholder="Mobile Number" />
 					</StackLayout>
 
-					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-						<Button Text="Search" Command="{Binding SearchCommand}" />
-					</StackLayout>
 				</StackLayout>
 			</ScrollView>
+
+			<Button Text="Search" Command="{Binding SearchCommand}" Style="{StaticResource AbsSubmit}" />
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -37,13 +37,10 @@
 						<Editor Text="{Binding Model.Detail}" Placeholder="Details" />
 					</StackLayout>
 
-					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-						<Button Text="Save Order" Command="{Binding SaveCommand}" />
-					</StackLayout>
-
 				</StackLayout>
 			</ScrollView>
 
+			<Button Text="Save Order" Command="{Binding SaveCommand}" Style="{StaticResource AbsSubmit}" />
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
 	</ContentPage.Content>

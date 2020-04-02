@@ -16,39 +16,38 @@
 						<Entry Text="{Binding Model.Name}" Placeholder="Application Name" />
 					</StackLayout>
 
-					<StackLayout  Style="{StaticResource FormBlock}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-						<Button Text="Add App" Command="{Binding AddAppNameCommand}" />
-					</StackLayout>
-
 					<BoxView Color="Transparent" HeightRequest="50" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" />
 
-					<ListView ItemsSource="{Binding AppList}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" >
-						<ListView.ItemTemplate>
-							<DataTemplate>
-								<ViewCell IsEnabled="False">
-									<ContentView>
-										<Grid>
-											<Grid.RowDefinitions>
-												<RowDefinition Height="70"/>
-											</Grid.RowDefinitions>
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="60"/>
-												<ColumnDefinition Width="10"/>
-												<ColumnDefinition Width="Auto"/>
-											</Grid.ColumnDefinitions>
+					<ScrollView>
+						<ListView ItemsSource="{Binding AppList}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" >
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<ViewCell IsEnabled="False">
+										<ContentView>
+											<Grid>
+												<Grid.RowDefinitions>
+													<RowDefinition Height="70"/>
+												</Grid.RowDefinitions>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="60"/>
+													<ColumnDefinition Width="10"/>
+													<ColumnDefinition Width="Auto"/>
+												</Grid.ColumnDefinitions>
 
-											<Label Text="{Binding Id}" Style="{StaticResource AppLabel}" HorizontalOptions="EndAndExpand" Grid.Column="0" />
-											<Label Text=":" Style="{StaticResource AppLabel}" Grid.Column="1" />
-											<Label Text="{Binding Name}"  Style="{StaticResource AppLabel}" Grid.Column="2" />
-										</Grid>
-									</ContentView>
-								</ViewCell>
-							</DataTemplate>
-						</ListView.ItemTemplate>
-					</ListView>
+												<Label Text="{Binding Id}" Style="{StaticResource AppLabel}" HorizontalOptions="EndAndExpand" Grid.Column="0" />
+												<Label Text=":" Style="{StaticResource AppLabel}" Grid.Column="1" />
+												<Label Text="{Binding Name}"  Style="{StaticResource AppLabel}" Grid.Column="2" />
+											</Grid>
+										</ContentView>
+									</ViewCell>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</ScrollView>
 				</StackLayout>
 			</ScrollView>
 
+			<Button Text="Add App" Command="{Binding AddAppNameCommand}" Style="{StaticResource AbsSubmit}"/>
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
 	</ContentPage.Content>

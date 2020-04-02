@@ -12,15 +12,14 @@
 	<ContentPage.Content>
 		<AbsoluteLayout>
 			<ScrollView Style="{StaticResource FormScroll}">
-				<Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+				<Grid Style="{StaticResource AbsGrid}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70"/>
 						<RowDefinition Height="70"/>
 						<RowDefinition Height="70"/>
 						<RowDefinition Height="70"/>
-						<RowDefinition Height="70"/>
+						<RowDefinition Height="20"/>
 						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="70"/>
 					</Grid.RowDefinitions>
 
 					<Grid.ColumnDefinitions>
@@ -35,33 +34,36 @@
 					<Entry Text="{Binding Model.SimNo}"  Placeholder="Sim Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Keyboard="Numeric" />
 					<BoxView Color="Transparent" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="4" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" />
 
-					<ListView ItemsSource="{Binding AppList, Mode=TwoWay}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="5" >
-						<ListView.ItemTemplate>
-							<DataTemplate>
-								<ViewCell>
-									<ContentView>
-										<Grid>
-											<Grid.RowDefinitions>
-												<RowDefinition Height="70"/>
-											</Grid.RowDefinitions>
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="100"/>
-												<ColumnDefinition Width="*"/>
-											</Grid.ColumnDefinitions>
+					<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="5">
+						<StackLayout>
+							<ListView ItemsSource="{Binding AppList, Mode=TwoWay}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<ViewCell>
+											<ContentView>
+												<Grid>
+													<Grid.RowDefinitions>
+														<RowDefinition Height="70"/>
+													</Grid.RowDefinitions>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="100"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
 
-											<CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"/>
-											<Label Text="{Binding Name}"  Style="{StaticResource AppLabel}" Grid.Column="1" />
-										</Grid>
-									</ContentView>
-								</ViewCell>
-							</DataTemplate>
-						</ListView.ItemTemplate>
-					</ListView>
-
-					<Button Text="Save" Command="{Binding SavePhoneInfoCommand}" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="6"/>
-
+													<CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"/>
+													<Label Text="{Binding Name}"  Style="{StaticResource AppLabel}" Grid.Column="1" />
+												</Grid>
+											</ContentView>
+										</ViewCell>
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
+						</StackLayout>
+					</ScrollView>
 				</Grid>
 			</ScrollView>
+
+			<Button Text="Save" Command="{Binding SavePhoneInfoCommand}" Style="{StaticResource AbsSubmit}" />
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
 	</ContentPage.Content>

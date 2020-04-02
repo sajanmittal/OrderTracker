@@ -255,6 +255,32 @@ namespace OrderTracker
 			};
 
 			Add(() => AppLabel);
+
+			var AbsSubmit = new Style(typeof(Button))
+			{
+				Setters ={
+						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.CenterAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.CenterAndExpand},
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(.5,1,.5,.1)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.All),
+						Setter(VisualElement.VisualProperty, VisualMarker.Material)
+				}
+			};
+
+			Add(() => AbsSubmit);
+
+			var AbsGrid = new Style(typeof(Grid))
+			{
+				Setters ={
+						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional),
+						Setter(VisualElement.VisualProperty, VisualMarker.Material)
+				}
+			};
+
+			Add(() => AbsGrid);
 		}
 
 		private static void Add(Expression<Func<Style>> style)
