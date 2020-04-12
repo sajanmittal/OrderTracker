@@ -1,7 +1,7 @@
 ﻿namespace OrderTracker
 {
-    public interface IFileAccessService
-    {
-        string GetFileLocation();
-    }
+	public interface IFileAccessService
+	{
+		string GetFileLocation();
+	}
 }

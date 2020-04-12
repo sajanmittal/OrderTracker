@@ -13,6 +13,6 @@ namespace OrderTracker
 
 		public override ICommand Command { get; set; }
 
-		public override Type PageType =>  typeof(T);
+		public override Type PageType => typeof(T);
 	}
 }

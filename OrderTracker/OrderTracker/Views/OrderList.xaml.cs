@@ -1,42 +1,40 @@
-﻿
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace OrderTracker.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class OrderList : ContentPage
-    {
-        public OrderViewModel viewModel;
-        private SearchItem item;
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class OrderList : ContentPage
+	{
+		public OrderViewModel viewModel;
+		private SearchItem item;
 
-        public OrderList(SearchItem searchItem)
-        {
-            InitializeComponent();
-            item = searchItem;
-            if (viewModel == null)
-                viewModel = new OrderViewModel( this);
+		public OrderList(SearchItem searchItem)
+		{
+			InitializeComponent();
+			item = searchItem;
+			if (viewModel == null)
+				viewModel = new OrderViewModel(this);
 
-            BindingContext = viewModel;
-        }
+			BindingContext = viewModel;
+		}
 
-        protected override void OnAppearing()
-        {
+		protected override void OnAppearing()
+		{
+			base.OnAppearing();
+			if (item == null)
+				return;
 
-            base.OnAppearing();
-            if (item == null)
-                return;
+			viewModel.GetSearchDataCommand.Execute(item);
+		}
 
-            viewModel.GetSearchDataCommand.Execute(item);
-        }
-
-        private void OrderListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            var item = e.Item as Order;
-            if (item != null)
-            {
-                viewModel.ItemTapped.Execute(item);
-            }
-        }
-    }
+		private void OrderListView_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
+			var item = e.Item as Order;
+			if (item != null)
+			{
+				viewModel.ItemTapped.Execute(item);
+			}
+		}
+	}
 }

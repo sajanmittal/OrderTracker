@@ -9,9 +9,6 @@
 
 	<ContentPage.Content>
 		<AbsoluteLayout x:Name="absLayout">
-			<ScrollView Style="{StaticResource FormScroll}">
-				<StackLayout x:Name="BaseStackLayout" Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" Orientation="Vertical" FlowDirection="LeftToRight" />
-			</ScrollView>
 
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" AbsoluteLayout.LayoutBounds="0.5,0.5,100,100" />
 		</AbsoluteLayout>

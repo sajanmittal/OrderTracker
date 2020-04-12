@@ -25,6 +25,7 @@ namespace OrderTracker
 		private static void AddConverters()
 		{
 			resources.Add("Toggle", new ToggleConverter());
+			resources.Add("Null2Bool", new NullValueBoolConverter());
 		}
 
 		private static void ImplicitStyles()
@@ -45,7 +46,6 @@ namespace OrderTracker
 						Setter(View.VerticalOptionsProperty, LayoutOptions.EndAndExpand),
 						Setter(VisualElement.BackgroundColorProperty, Color.Transparent),
 						Setter(Entry.PlaceholderColorProperty, Color.Accent)
-
 					 },
 				BasedOn = materialDesignBase
 			}
@@ -123,7 +123,6 @@ namespace OrderTracker
 					Setter(View.VerticalOptionsProperty, LayoutOptions.FillAndExpand)
 				},
 				BasedOn = materialDesignBase
-
 			});
 
 			resources.Add(new Style(typeof(CheckBox))
@@ -148,11 +147,23 @@ namespace OrderTracker
 					},
 				BasedOn = materialDesignBase
 			});
+
+			resources.Add(new Style(typeof(Picker))
+			{
+				Setters =
+					 {
+						Setter(View.HorizontalOptionsProperty, LayoutOptions.FillAndExpand),
+						Setter(View.VerticalOptionsProperty, LayoutOptions.EndAndExpand),
+						Setter(VisualElement.BackgroundColorProperty, Color.Transparent),
+						Setter(Picker.TitleColorProperty, Color.Accent)
+					 },
+				BasedOn = materialDesignBase
+			}
+			);
 		}
 
 		private static void ExplicitStyles()
 		{
-
 			var TextLabel = new Style(typeof(Label))
 			{
 				Setters =
@@ -176,7 +187,6 @@ namespace OrderTracker
 
 			var Form = new Style(typeof(StackLayout))
 			{
-
 				Setters =
 					 {
 						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
@@ -191,7 +201,6 @@ namespace OrderTracker
 
 			var FormBlock = new Style(typeof(StackLayout))
 			{
-
 				Setters =
 					 {
 						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
@@ -202,7 +211,7 @@ namespace OrderTracker
 			};
 			Add(() => FormBlock);
 
-			var ListViewLayout = new Style(typeof(ListView))
+			var ListViewBase = new Style(typeof(ListView))
 			{
 				Setters =
 					 {
@@ -212,11 +221,21 @@ namespace OrderTracker
 						new Setter{Property= ListView.HasUnevenRowsProperty, Value= false},
 						new Setter{Property= ListView.SeparatorVisibilityProperty, Value = false},
 						new Setter{Property= ListView.IsPullToRefreshEnabledProperty, Value= false},
-						new Setter{Property= ListView.RowHeightProperty, Value= 110},
-						new Setter{Property= ListView.SeparatorColorProperty, Value= Color.Transparent},
-						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize)),
-						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional)
+						new Setter{Property= ListView.SeparatorColorProperty, Value= Color.Transparent}
 					 }
+			};
+
+			Add(() => ListViewBase);
+
+			var ListViewLayout = new Style(typeof(ListView))
+			{
+				Setters =
+				{
+					new Setter { Property = ListView.RowHeightProperty, Value = 110 },
+					Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize)),
+					Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional)
+				},
+				BasedOn = ListViewBase
 			};
 			Add(() => ListViewLayout);
 
@@ -250,7 +269,7 @@ namespace OrderTracker
 					Setter(View.HorizontalOptionsProperty,LayoutOptions.StartAndExpand),
 					Setter(View.VerticalOptionsProperty, LayoutOptions.CenterAndExpand),
 					Setter(Label.FontAttributesProperty, FontAttributes.Bold),
-					Setter(Label.FontSizeProperty, 18)
+					Setter(Label.FontSizeProperty, 16)
 				}
 			};
 
@@ -269,13 +288,26 @@ namespace OrderTracker
 
 			Add(() => AbsSubmit);
 
+			var AbsLayout = new Style(typeof(StackLayout))
+			{
+				Setters ={
+						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
+						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.Fill},
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0,1, 1,.2)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.All),
+						Setter(VisualElement.VisualProperty, VisualMarker.Material)
+				}
+			};
+
+			Add(() => AbsLayout);
+
 			var AbsGrid = new Style(typeof(Grid))
 			{
 				Setters ={
 						new Setter{Property = View.HorizontalOptionsProperty, Value = LayoutOptions.FillAndExpand},
 						new Setter{Property  = View.VerticalOptionsProperty, Value= LayoutOptions.FillAndExpand},
-						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize)),
-						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional),
+						Setter(AbsoluteLayout.LayoutBoundsProperty, new Rectangle(0, 0, 1, AbsoluteLayout.AutoSize)),
+						Setter(AbsoluteLayout.LayoutFlagsProperty, AbsoluteLayoutFlags.PositionProportional | AbsoluteLayoutFlags.WidthProportional),
 						Setter(VisualElement.VisualProperty, VisualMarker.Material)
 				}
 			};
@@ -286,10 +318,10 @@ namespace OrderTracker
 		private static void Add(Expression<Func<Style>> style)
 		{
 			var styleInfo = style.GetMemberInfo();
-			resources.Add(styleInfo.Name, style?.Compile().Invoke());
+			if (!resources.ContainsKey(styleInfo.Name))
+				resources.Add(styleInfo.Name, style?.Compile().Invoke());
 		}
 
 		private static Setter Setter(BindableProperty property, object value) => new Setter { Property = property, Value = value };
-
 	}
 }

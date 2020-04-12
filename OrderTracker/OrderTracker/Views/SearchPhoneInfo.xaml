@@ -7,25 +7,24 @@
              x:Class="OrderTracker.Views.SearchPhoneInfo"
 				 Title="Search Phone Information">
 	<ContentPage.ToolbarItems>
-		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}"/>
+		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}" />
 	</ContentPage.ToolbarItems>
 
 	<ContentPage.Content>
-        <StackLayout>
-			<AbsoluteLayout x:Name="absLayout">
-				<Grid Style="{StaticResource AbsGrid}">
+		<AbsoluteLayout x:Name="absLayout" IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
+			<Grid Style="{StaticResource AbsGrid}">
 
-					<Grid.RowDefinitions>
-						<RowDefinition Height="50"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="50" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
 
-				<SearchBar Placeholder="Phone Number" TextChanged="PhoneSearchBar_TextChanged" Grid.Row="0"/>
-					<ListView x:Name="PhoneListView" ItemsSource="{Binding PhoneInfoList}" Style="{StaticResource ListViewLayout}" HeightRequest="{Binding Path=Height, Source={x:Reference absLayout}}" Grid.Row="1">
+				<SearchBar Placeholder="Phone Number" TextChanged="PhoneSearchBar_TextChanged" Grid.Row="0" />
+				<ListView x:Name="PhoneListView" ItemsSource="{Binding PhoneInfoList}" Style="{StaticResource ListViewLayout}" HeightRequest="{Binding Path=Height, Source={x:Reference absLayout}}" Grid.Row="1" SelectedItem="{Binding Model, Mode=TwoWay}" ItemTapped="PhoneListView_ItemTapped">
 					<!--Built in Cells-->
 					<ListView.ItemTemplate>
 						<DataTemplate>
@@ -34,21 +33,20 @@
 									<Frame Style="{StaticResource ListViewFrame}">
 										<Grid Padding="5">
 											<Grid.RowDefinitions>
-												<RowDefinition Height="*"/>
-												<RowDefinition Height="*"/>
+												<RowDefinition Height="*" />
+												<RowDefinition Height="*" />
 											</Grid.RowDefinitions>
 											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="60"/>
-												<ColumnDefinition Width="Auto"/>
-												<ColumnDefinition Width="Auto"/>
+												<ColumnDefinition Width="60" />
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="*" />
 											</Grid.ColumnDefinitions>
 
-											<Image Source="sim_icon.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit"/>
+											<Image Source="sim_icon.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit" />
 
-											<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" />
-											<Label Text="{Binding Company}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" />
-											<Label Text="{Binding ExpiryDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextLabel}" />
-
+											<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
+											<Label Text="{Binding Company}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
+											<Label Text="{Binding ExpiryDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
 										</Grid>
 									</Frame>
 								</ContentView>
@@ -56,9 +54,8 @@
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>
-				</Grid>
-				<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-			</AbsoluteLayout>
-		</StackLayout>
-    </ContentPage.Content>
+			</Grid>
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+		</AbsoluteLayout>
+	</ContentPage.Content>
 </ContentPage>

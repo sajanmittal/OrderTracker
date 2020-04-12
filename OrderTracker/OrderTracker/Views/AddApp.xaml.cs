@@ -1,5 +1,4 @@
-﻿
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace OrderTracker.Views
@@ -8,6 +7,7 @@ namespace OrderTracker.Views
 	public partial class AddApp : ContentPage
 	{
 		public AppNameViewModel viewModel;
+
 		public AddApp()
 		{
 			InitializeComponent();
@@ -16,6 +16,7 @@ namespace OrderTracker.Views
 
 			BindingContext = viewModel;
 		}
+
 		protected override void OnAppearing()
 		{
 			viewModel.GetAppsCommand?.Execute(this);

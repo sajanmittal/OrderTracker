@@ -1,16 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using System.Linq;
-using System.Collections.Generic;
-using System;
 
 namespace OrderTracker
 {
 	public class AppNameViewModel : ViewModelBase<AppName>
 	{
-		public AppNameViewModel( Page page) : base(page)
+		public AppNameViewModel(Page page) : base(page)
 		{
 			GetAppsCommand = new Command(async () => await GetAppData());
 			AddAppNameCommand = new Command(async () => await AddAppName());
@@ -19,6 +19,7 @@ namespace OrderTracker
 		}
 
 		private ObservableCollection<AppName> appList;
+
 		public ObservableCollection<AppName> AppList
 		{
 			get => appList;
@@ -29,19 +30,18 @@ namespace OrderTracker
 
 		private async Task GetAppData()
 		{
-			await RunAsync(async () =>
+			await RunAsync(async (ct) =>
 			{
 				await UpdateAppList();
-			});
+			}, true);
 		}
 
-		public ICommand AddAppNameCommand{ get; set; }
+		public ICommand AddAppNameCommand { get; set; }
 
 		private async Task AddAppName()
 		{
-			await RunAsync(async () =>
+			await RunAsync(async (ct) =>
 			{
-
 				if (string.IsNullOrWhiteSpace(Model.Name))
 				{
 					LoggerService.LogError(new Exception("App Name is not provided"));

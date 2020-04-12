@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OrderTracker
 {
-	public class BackupModule<T> : IBackupModule where T: IBaseModel, new()
+	public class BackupModule<T> : IBackupModule where T : IBaseModel, new()
 	{
 		public Type BackupTableType => typeof(T);
 

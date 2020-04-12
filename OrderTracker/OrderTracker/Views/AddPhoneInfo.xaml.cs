@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace OrderTracker.Views
@@ -13,19 +7,33 @@ namespace OrderTracker.Views
 	public partial class AddPhoneInfo : ContentPage
 	{
 		private PhoneInfoViewModel viewModel;
+
 		public AddPhoneInfo()
 		{
 			InitializeComponent();
-			if(viewModel == null)
+			if (viewModel == null)
 			{
 				viewModel = new PhoneInfoViewModel(this);
 			}
 			BindingContext = viewModel;
 		}
 
+		public AddPhoneInfo(PhoneInformation Model)
+		{
+			InitializeComponent();
+			if (viewModel == null)
+			{
+				viewModel = new PhoneInfoViewModel(this, true);
+			}
+			BindingContext = viewModel;
+			viewModel.Model = Model;
+		}
+
 		protected async override void OnAppearing()
 		{
-			await viewModel.UpdateAppList();
+			await viewModel.UpdateLists();
+			SearchButton.IsEnabled = !viewModel.isEditPage;
+			PhoneEntry.IsReadOnly = viewModel.isEditPage;
 			base.OnAppearing();
 		}
 	}

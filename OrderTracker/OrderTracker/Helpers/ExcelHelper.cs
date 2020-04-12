@@ -1,10 +1,9 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace OrderTracker
@@ -13,15 +12,14 @@ namespace OrderTracker
 	{
 		public async static Task ToExcel<TData>(IEnumerable<TData> data, string path)
 		{
+			using (SpreadsheetDocument document = SpreadsheetDocument.Create(path, SpreadsheetDocumentType.Workbook, true))
+			{
+				DataSet dataSet = new DataSet();
+				dataSet.Tables.Add(await data.ToDataTable());
 
-				using (SpreadsheetDocument document = SpreadsheetDocument.Create(path, SpreadsheetDocumentType.Workbook, true))
-				{
-					DataSet dataSet = new DataSet();
-					dataSet.Tables.Add(await data.ToDataTable());
-
-					await CreateExcel(dataSet, document);
-					document.Save();
-				}
+				await CreateExcel(dataSet, document);
+				document.Save();
+			}
 		}
 
 		public async static Task ToExcel<TKey, TData>(IEnumerable<IGrouping<TKey, TData>> groupedData, string path)
@@ -29,10 +27,11 @@ namespace OrderTracker
 			using (SpreadsheetDocument document = SpreadsheetDocument.Create(path, SpreadsheetDocumentType.Workbook, true))
 			{
 				DataSet dataSet = new DataSet();
-
+				uint uniqueIndex = 1;
 				foreach (var data in groupedData)
 				{
-					dataSet.Tables.Add(await data.ToDataTable(data.Key.ToString()));
+					dataSet.Tables.Add(await data.ToDataTable($"{uniqueIndex}_{data.Key}"));
+					uniqueIndex++;
 				}
 				await CreateExcel(dataSet, document);
 				document.Save();
@@ -63,8 +62,7 @@ namespace OrderTracker
 			{
 				workSheetTasks.Add(Task.Run(() =>
 				{
-
-					WorksheetPart newWorksheetPart =		workbook.AddNewPart<WorksheetPart>();
+					WorksheetPart newWorksheetPart = workbook.AddNewPart<WorksheetPart>();
 					newWorksheetPart.Worksheet = new Worksheet();
 
 					newWorksheetPart.Worksheet.AppendChild(new SheetData());
@@ -80,12 +78,13 @@ namespace OrderTracker
 					newWorksheetPart.Worksheet.Save();
 					workSheets.Add(sheet);
 				}));
+				sheetNumber++;
 			}
 
 			var allTasks = Task.WhenAll(workSheetTasks);
 			await allTasks;
 
-			if(allTasks.IsCompleted)
+			if (allTasks.IsCompleted)
 			{
 				var sheets = workbook.Workbook.GetFirstChild<Sheets>();
 				workSheets.ForEach(s => sheets.AppendChild(s));
@@ -101,12 +100,6 @@ namespace OrderTracker
 			string[] excelColumnNames = new string[numberOfColumns];
 			for (int n = 0; n < numberOfColumns; n++)
 				excelColumnNames[n] = GetExcelColumnName(n);
-
-			//WorkbookStylesPart headerStylesPart = worksheetPart.AddNewPart<WorkbookStylesPart>("otHeaderStyles");
-			//Stylesheet stylesheet = new Stylesheet();
-			//stylesheet.Fonts.Append(new Font(new Bold(), new FontSize { Val = 12 }));
-			//headerStylesPart.Stylesheet = stylesheet;
-			//headerStylesPart.Stylesheet.Save();
 
 			uint rowIndex = 1;
 

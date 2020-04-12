@@ -7,49 +7,58 @@
              x:Class="OrderTracker.Views.OrderList"
 				 Title="Orders">
 	<ContentPage.ToolbarItems>
-		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}"/>
+		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<AbsoluteLayout x:Name="absLayout">
-			<ListView x:Name="OrderListView" ItemTapped="OrderListView_ItemTapped" ItemsSource="{Binding OrderList}" Style="{StaticResource ListViewLayout}" SelectedItem="{Binding Model, Mode=TwoWay}" HeightRequest="{Binding Path=Height, Source={x:Reference absLayout}}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" >
-				<!--Built in Cells-->
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<ViewCell>
-							<ContentView Margin="5">
-								<Frame Style="{StaticResource ListViewFrame}">
-									<Grid Padding="5">
-										<Grid.RowDefinitions>
-											<RowDefinition Height="*"/>
-											<RowDefinition Height="*"/>
-											<RowDefinition Height="*"/>
-											<RowDefinition Height="*"/>
-										</Grid.RowDefinitions>
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="60"/>
-											<ColumnDefinition Width="Auto"/>
-											<ColumnDefinition Width="Auto"/>
-											<ColumnDefinition Width="*"/>
-										</Grid.ColumnDefinitions>
+		<AbsoluteLayout x:Name="absLayout"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
+			<Grid Style="{StaticResource AbsGrid}">
 
-										<Image Source="order.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" HorizontalOptions="Center" VerticalOptions="Center" />
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-										<Label Text="{Binding CloneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" />
-										<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" />
-										<Label Text="{Binding OrderDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="0" Grid.Column="3" Style="{StaticResource TextLabelEnd}" />
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
 
-										<Label Text="{Binding Detail}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-										<Label Text="{Binding TrackingNo}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource TextLabel}" />
+				<ListView x:Name="OrderListView" ItemTapped="OrderListView_ItemTapped" ItemsSource="{Binding OrderList}" Style="{StaticResource ListViewLayout}" SelectedItem="{Binding Model, Mode=TwoWay}" HeightRequest="{Binding Path=Height, Source={x:Reference absLayout}}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
+					<!--Built in Cells-->
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<ContentView Margin="5">
+									<Frame Style="{StaticResource ListViewFrame}">
+										<Grid Padding="5">
+											<Grid.RowDefinitions>
+												<RowDefinition Height="*" />
+												<RowDefinition Height="*" />
+												<RowDefinition Height="*" />
+												<RowDefinition Height="*" />
+											</Grid.RowDefinitions>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="60" />
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="*" />
+											</Grid.ColumnDefinitions>
 
-									</Grid>
-								</Frame>
-							</ContentView>
-						</ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+											<Image Source="order.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" HorizontalOptions="Center" VerticalOptions="Center" />
+
+											<Label Text="{Binding CloneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" />
+											<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" />
+											<Label Text="{Binding OrderDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="0" Grid.Column="3" Style="{StaticResource TextLabelEnd}" />
+
+											<Label Text="{Binding Detail}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
+											<Label Text="{Binding TrackingNo}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource TextLabel}" />
+										</Grid>
+									</Frame>
+								</ContentView>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</Grid>
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
 	</ContentPage.Content>
 </ContentPage>
- 

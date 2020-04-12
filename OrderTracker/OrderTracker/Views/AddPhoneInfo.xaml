@@ -7,61 +7,70 @@
              x:Class="OrderTracker.Views.AddPhoneInfo"
 				 Title="Phone Information">
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="SEARCH" Order="Primary" Command="{Binding SearchCommand}" />
+		<ToolbarItem Text="SEARCH" Order="Primary" Command="{Binding SearchCommand}" x:Name="SearchButton" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<AbsoluteLayout>
-			<ScrollView Style="{StaticResource FormScroll}">
-				<Grid Style="{StaticResource AbsGrid}">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="70"/>
-						<RowDefinition Height="70"/>
-						<RowDefinition Height="70"/>
-						<RowDefinition Height="70"/>
-						<RowDefinition Height="20"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
+			<Grid Style="{StaticResource AbsGrid}">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="70" />
+					<RowDefinition Height="70" />
+					<RowDefinition Height="70" />
+					<RowDefinition Height="70" />
+					<RowDefinition Height="70" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="120"/>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="120" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
 
-					<Entry Text="{Binding Model.PhoneNo}" Placeholder="Phone Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" Keyboard="Telephone" />
-					<Entry Text="{Binding Model.Company}" Placeholder="Service Provider" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" />
-					<Label Text="Sim Expiry Date : " Style="{StaticResource TextLabel}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="2" />
-					<DatePicker Date="{Binding Model.ExpiryDate}" HorizontalOptions="FillAndExpand" MinimumDate="{Binding Today}" Grid.Column="1" Grid.Row="2" />
-					<Entry Text="{Binding Model.SimNo}"  Placeholder="Sim Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Keyboard="Numeric" />
-					<BoxView Color="Transparent" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="4" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" />
+				<Entry Text="{Binding Model.PhoneNo}" Placeholder="Phone Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" Keyboard="Telephone" x:Name="PhoneEntry" />
+				<Picker Title="Service Provider" ItemsSource="{Binding Operators}" SelectedItem="{Binding SelectedOperator, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" />
+				<Label Text="Sim Expiry Date : " Style="{StaticResource TextLabel}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="2" />
+				<DatePicker Date="{Binding Model.ExpiryDate}" HorizontalOptions="FillAndExpand" MinimumDate="{Binding Today}" Grid.Column="1" Grid.Row="2" />
+				<Entry Text="{Binding Model.SimNo}"  Placeholder="Sim Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Keyboard="Numeric" />
+				<Entry Text="{Binding Model.PaymentCloneNo}" Placeholder="PayZapp Clone Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="4" Keyboard="Numeric" />
 
-					<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="5">
-						<StackLayout>
-							<ListView ItemsSource="{Binding AppList, Mode=TwoWay}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
-								<ListView.ItemTemplate>
-									<DataTemplate>
-										<ViewCell>
-											<ContentView>
-												<Grid>
-													<Grid.RowDefinitions>
-														<RowDefinition Height="70"/>
-													</Grid.RowDefinitions>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="100"/>
-														<ColumnDefinition Width="*"/>
-													</Grid.ColumnDefinitions>
+				<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="5">
+					<StackLayout>
+						<ListView ItemsSource="{Binding AppList, Mode=TwoWay}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20,10">
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<ViewCell>
+										<ContentView>
+											<Grid>
+												<Grid.RowDefinitions>
+													<RowDefinition Height="55" />
+												</Grid.RowDefinitions>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="*" />
+													<ColumnDefinition Width="*" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
 
-													<CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"/>
-													<Label Text="{Binding Name}"  Style="{StaticResource AppLabel}" Grid.Column="1" />
-												</Grid>
-											</ContentView>
-										</ViewCell>
-									</DataTemplate>
-								</ListView.ItemTemplate>
-							</ListView>
-						</StackLayout>
-					</ScrollView>
-				</Grid>
-			</ScrollView>
+												<StackLayout Grid.Column="0" Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Item1, Converter={StaticResource Null2Bool}}">
+													<CheckBox IsChecked="{Binding Item1.IsSelected, Mode=TwoWay}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" />
+													<Label Text="{Binding Item1.Name}"  Style="{StaticResource AppLabel}" />
+												</StackLayout>
+												<StackLayout Grid.Column="1" Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Item2, Converter={StaticResource Null2Bool}}">
+													<CheckBox IsChecked="{Binding Item2.IsSelected, Mode=TwoWay}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" />
+													<Label Text="{Binding Item2.Name}"  Style="{StaticResource AppLabel}" />
+												</StackLayout>
+												<StackLayout Grid.Column="2" Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Item3, Converter={StaticResource Null2Bool}}">
+													<CheckBox IsChecked="{Binding Item3.IsSelected, Mode=TwoWay}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" />
+													<Label Text="{Binding Item3.Name}"  Style="{StaticResource AppLabel}" />
+												</StackLayout>
+											</Grid>
+										</ContentView>
+									</ViewCell>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</StackLayout>
+				</ScrollView>
+			</Grid>
 
 			<Button Text="Save" Command="{Binding SavePhoneInfoCommand}" Style="{StaticResource AbsSubmit}" />
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />

@@ -7,18 +7,18 @@ using Xamarin.Forms;
 
 namespace OrderTracker.Droid
 {
-    public class ToastService : IToastService
-    {
-        public void ShowSnackbar(string message)
-        {
-            var activity = CrossCurrentActivity.Current.Activity;
-            Android.Views.View activityRootView = activity.FindViewById(Android.Resource.Id.Content);
-            Snackbar.Make(activityRootView, message, Snackbar.LengthLong).Show();
-        }
+	public class ToastService : IToastService
+	{
+		public void ShowSnackbar(string message)
+		{
+			var activity = CrossCurrentActivity.Current.Activity;
+			Android.Views.View activityRootView = activity.FindViewById(Android.Resource.Id.Content);
+			Snackbar.Make(activityRootView, message, Snackbar.LengthLong).Show();
+		}
 
-        public void ShowToast(string message)
-        {
-             Toast.MakeText(Android.App.Application.Context, message, ToastLength.Long).Show();
-        }
-    }
+		public void ShowToast(string message)
+		{
+			Toast.MakeText(Android.App.Application.Context, message, ToastLength.Long).Show();
+		}
+	}
 }

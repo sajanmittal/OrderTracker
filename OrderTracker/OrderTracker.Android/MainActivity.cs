@@ -1,16 +1,15 @@
-﻿
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Plugin.CurrentActivity;
-using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 using EPlatform = Xamarin.Essentials.Platform;
 
 namespace OrderTracker.Droid
 {
-	[Activity(Label = "Order Manager", Theme = "@style/MainTheme", Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
+	[Activity(Label = "Order Manager", Theme = "@style/MainTheme", Icon = "@mipmap/ic_launcher", RoundIcon = "@mipmap/ic_launcher", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : FormsAppCompatActivity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -27,6 +26,7 @@ namespace OrderTracker.Droid
 
 			LoadApplication(new App());
 		}
+
 		public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
 		{
 			EPlatform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

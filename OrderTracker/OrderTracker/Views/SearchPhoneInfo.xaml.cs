@@ -8,6 +8,7 @@ namespace OrderTracker.Views
 	public partial class SearchPhoneInfo : ContentPage
 	{
 		private SearchPhoneViewModel viewModel;
+
 		public SearchPhoneInfo()
 		{
 			InitializeComponent();
@@ -29,6 +30,15 @@ namespace OrderTracker.Views
 				PhoneListView.ItemsSource = viewModel.PhoneInfoList;
 			else
 				PhoneListView.ItemsSource = viewModel.PhoneInfoList.Where(x => x.PhoneNo.Contains(e.NewTextValue));
+		}
+
+		private void PhoneListView_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
+			var phoneInfo = e.Item as PhoneInformation;
+			if (viewModel != null)
+			{
+				viewModel.ItemTapped?.Execute(phoneInfo);
+			}
 		}
 	}
 }

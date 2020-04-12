@@ -6,7 +6,7 @@ namespace OrderTracker
 {
 	public abstract class ViewModelBase<T> : BaseViewModel where T : IBaseModel, new()
 	{
-		public ViewModelBase( Page page)
+		public ViewModelBase(Page page)
 		{
 			BindingPage = page;
 			if (model == null)
@@ -41,12 +41,12 @@ namespace OrderTracker
 
 		public async Task PushAsync(Page page)
 		{
-				await BindingPage.Navigation.PushAsync(page);
+			await BindingPage.Navigation.PushAsync(page);
 		}
 
 		public async Task PopAsync()
 		{
-				await BindingPage.Navigation.PopAsync();
+			await BindingPage.Navigation.PopAsync();
 		}
 
 		public DateTime Today => DateTime.Today;

@@ -1,6 +1,4 @@
-﻿
-
-namespace OrderTracker
+﻿namespace OrderTracker
 {
 	public class EmptyModel : IBaseModel
 	{

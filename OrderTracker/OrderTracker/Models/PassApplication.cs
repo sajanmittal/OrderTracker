@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace OrderTracker
 {
-	public class PassApplication: IPassApplication
+	public class PassApplication : IPassApplication
 	{
 		public string Name { get; set; }
 

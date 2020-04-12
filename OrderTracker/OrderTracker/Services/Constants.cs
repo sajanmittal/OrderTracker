@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Xamarin.Essentials;
 
 namespace OrderTracker
@@ -35,5 +34,7 @@ namespace OrderTracker
 		public const string FILE_DATE_FRMT = "yyyy-MM-dd HH-mm-ss";
 
 		public const string DATE_FRMT = "dd-MMM-yyyy";
+
+		public const int TASK_TIMEOUT = 180;
 	}
 }

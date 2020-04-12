@@ -1,6 +1,6 @@
-﻿using OrderTracker.Views;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
+using OrderTracker.Views;
 using Xamarin.Forms;
 
 namespace OrderTracker
@@ -16,8 +16,9 @@ namespace OrderTracker
 
 		private async Task SearchAsync()
 		{
-			await RunAsync(async () => { 
-			await PushAsync(new OrderList(Model)); 
+			await RunAsync(async (ct) =>
+			{
+				await PushAsync(new OrderList(Model));
 			});
 		}
 	}

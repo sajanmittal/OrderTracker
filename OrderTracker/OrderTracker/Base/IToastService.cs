@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OrderTracker
+﻿namespace OrderTracker
 {
-    public interface IToastService
-    {
-        void ShowToast(string message);
-        void ShowSnackbar(string message);
-    }
+	public interface IToastService
+	{
+		void ShowToast(string message);
+
+		void ShowSnackbar(string message);
+	}
 }

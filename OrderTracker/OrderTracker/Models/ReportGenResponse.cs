@@ -6,6 +6,6 @@
 
 		public bool IsGenerated { get; set; }
 
-		public static ReportGenResponse Empty => new ReportGenResponse { IsGenerated = false, FileLocation = string.Empty};
+		public static ReportGenResponse Empty => new ReportGenResponse { IsGenerated = false, FileLocation = string.Empty };
 	}
 }

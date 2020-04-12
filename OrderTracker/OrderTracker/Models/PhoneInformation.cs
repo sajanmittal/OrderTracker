@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using SQLite;
-using System;
 
 namespace OrderTracker
 {
@@ -27,6 +27,8 @@ namespace OrderTracker
 		public string SimNo { get; set; }
 
 		public string Company { get; set; }
+
+		public string PaymentCloneNo { get; set; }
 
 		public DateTime ExpiryDate { get; set; }
 	}

@@ -1,6 +1,6 @@
 ﻿namespace OrderTracker
 {
-    public interface IBaseModel
-    {
-    }
+	public interface IBaseModel
+	{
+	}
 }

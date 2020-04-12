@@ -1,18 +1,16 @@
-﻿
-using OrderTracker.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using OrderTracker.Views;
 using Xamarin.Forms;
 
 namespace OrderTracker
 {
 	public class OrderViewModel : ViewModelBase<Order>
 	{
-
 		public OrderViewModel(Page page, bool isEditPage = false) : base(page)
 		{
 			SaveCommand = new Command(async () => await SaveOrder());
@@ -22,7 +20,6 @@ namespace OrderTracker
 			this.isEditPage = isEditPage;
 			if (OrderList == null)
 				OrderList = new ObservableCollection<Order>();
-
 		}
 
 		public readonly bool isEditPage;
@@ -31,7 +28,7 @@ namespace OrderTracker
 
 		private async Task SaveOrder()
 		{
-			await RunAsync(async () =>
+			await RunAsync(async (ct) =>
 			{
 				if (string.IsNullOrWhiteSpace(Model.PhoneNo) || Model.OrderDate == null || string.IsNullOrWhiteSpace(Model.CloneNo))
 				{
@@ -40,14 +37,14 @@ namespace OrderTracker
 				}
 
 				if (isEditPage)
-						await UpdateOrder();
-					else
-						await AddNewOrder();
-
+					await UpdateOrder();
+				else
+					await AddNewOrder();
 			});
 		}
 
 		private ObservableCollection<Order> items;
+
 		public ObservableCollection<Order> OrderList
 		{
 			get => items;
@@ -58,9 +55,8 @@ namespace OrderTracker
 
 		private async Task GetSearchData(SearchItem searchItem)
 		{
-			await RunAsync(async () =>
+			await RunAsync(async (ct) =>
 			{
-
 				List<Order> result = new List<Order>();
 
 				var query = (await App.DbService.SelectAsync<Order>(x => x.Status == Enums.OrderStatus.Pending)).AsQueryable();
@@ -96,30 +92,32 @@ namespace OrderTracker
 					LoggerService.LogInformation("No Record Found");
 				}
 			});
-
 		}
 
 		public ICommand ItemTapped { get; set; }
 
 		private async Task UpdateStatus(Order item)
 		{
-			await RunAsync(async () =>
+			await RunAsync(async (ct) =>
 			{
 				Model = item;
-				var updateStatus = await BindingPage.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Cancelled", "Update Record");
+				var updateStatus = await BindingPage.DisplayActionSheet($"Update {item.TrackingNo}({item.ShortDetail})", "Cancel", null, "Received", "Canceled", "Update Record");
 
 				switch (updateStatus)
 				{
 					case "Cancel":
 						return;
+
 					case "Received":
 						item.Status = Enums.OrderStatus.Received;
 						await UpdateItemStatus(item);
 						break;
-					case "Cancelled":
+
+					case "Canceled":
 						item.Status = Enums.OrderStatus.Cancelled;
 						await UpdateItemStatus(item);
 						break;
+
 					case "Update Record":
 						{
 							await PushAsync(new AddOrder(item));
@@ -135,22 +133,22 @@ namespace OrderTracker
 		{
 			ReportGenResponse response = ReportGenResponse.Empty;
 			var fileName = $"Order Summary {DateTime.Now.ToString(Constants.FILE_DATE_FRMT)}";
-			await RunAsync(async () =>
+			await RunAsync(async (ct) =>
 			{
 				IReportService reportService = new LocalReportService();
 				var data = await App.DbService.SelectAsync<Order>();
 				response = await reportService.Generate(data.OrderBy(x => x.Status), fileName);
 			},
+			true,
 			(ex) =>
 			{
 				response = ReportGenResponse.Empty;
 			});
 
-			if(response.IsGenerated)
+			if (response.IsGenerated)
 			{
 				LoggerService.LogInformation($"Report {fileName} Successfully Dowloaded ");
 			}
-
 		}
 
 		private async Task AddNewOrder()
@@ -174,7 +172,7 @@ namespace OrderTracker
 		private async Task UpdateOrder()
 		{
 			int updatedRecord = await App.DbService.UpdateAsync(Model);
-			if(updatedRecord > 0)
+			if (updatedRecord > 0)
 			{
 				await PopAsync();
 			}
@@ -188,8 +186,8 @@ namespace OrderTracker
 				var removedItem = items.FirstOrDefault(x => x.Id == item.Id);
 				if (removedItem != null)
 				{
-						items.Remove(removedItem);
-						LoggerService.LogInformation($"Order {removedItem.Status}.");
+					items.Remove(removedItem);
+					LoggerService.LogInformation($"Order {removedItem.Status}.");
 				}
 			}
 		}

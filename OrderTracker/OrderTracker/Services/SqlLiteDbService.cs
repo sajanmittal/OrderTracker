@@ -1,10 +1,10 @@
-﻿using SQLite;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SQLite;
 
 namespace OrderTracker
 {
@@ -23,13 +23,12 @@ namespace OrderTracker
 			InitializeAsync().ConfigureAwait(false);
 		}
 
-		async Task InitializeAsync()
+		private async Task InitializeAsync()
 		{
 			try
 			{
 				if (!initialized)
 				{
-
 					if (!Db.TableMappings.Any(m => m.MappedType.Name == nameof(Setting)))
 					{
 						await Db.CreateTablesAsync(CreateFlags.None, TablesList).ConfigureAwait(true);
@@ -48,7 +47,6 @@ namespace OrderTracker
 		}
 
 		private Type[] TablesList => new Type[] { typeof(Setting), typeof(Order), typeof(AppName), typeof(PhoneInformation), typeof(PhoneAppLink) };
-
 
 		public async Task<List<T>> SelectAsync<T>(Expression<Func<T, bool>> predicate = null) where T : IBaseModel, new()
 		{
@@ -119,14 +117,11 @@ namespace OrderTracker
 				try
 				{
 					bool isCompleted = action(conn);
-					if (isCompleted)
-						conn.Commit();
-					else
-						throw new Exception("Cound not save data. Got Errored!!");
+					if (!isCompleted)
+						throw new Exception("Cound not save data. Please contact support!!");
 				}
 				catch (Exception ex)
 				{
-					conn.Rollback();
 					throw ex;
 				}
 			});

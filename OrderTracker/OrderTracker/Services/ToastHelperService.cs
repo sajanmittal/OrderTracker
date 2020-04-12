@@ -2,22 +2,22 @@
 
 namespace OrderTracker
 {
-    public class ToastHelper
-    {
-        private static IToastService toast;
+	public class ToastHelper
+	{
+		private static IToastService toast;
 
-        static ToastHelper()
-        {
-            if (toast == null)
-                toast = DependencyService.Get<IToastService>();
-        }
+		static ToastHelper()
+		{
+			if (toast == null)
+				toast = DependencyService.Get<IToastService>();
+		}
 
-        public static void ToastMsg(string message, bool showInSnackBar = false)
-        {
-            if (showInSnackBar)
-                toast.ShowSnackbar(message);
-            else
-                toast.ShowToast(message);
-        }
-    }
+		public static void ToastMsg(string message, bool showInSnackBar = false)
+		{
+			if (showInSnackBar)
+				toast.ShowSnackbar(message);
+			else
+				toast.ShowToast(message);
+		}
+	}
 }

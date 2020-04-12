@@ -7,7 +7,7 @@ namespace OrderTracker.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class AddOrder : ContentPage
 	{
-		OrderViewModel viewModel;
+		private OrderViewModel viewModel;
 
 		public AddOrder()
 		{
@@ -29,7 +29,6 @@ namespace OrderTracker.Views
 
 			BindingContext = viewModel;
 		}
-
 
 		protected override void OnAppearing()
 		{

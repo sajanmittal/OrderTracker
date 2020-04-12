@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OrderTracker
@@ -19,7 +20,6 @@ namespace OrderTracker
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-
 		protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -35,20 +35,24 @@ namespace OrderTracker
 			return true;
 		}
 
-		public async Task RunAsync(Func<Task> action, Action<Exception> catchHandler = null, Action finalHadler = null)
+		public async Task RunAsync(Func<CancellationToken, Task> action, bool runInBackground = false, Action<Exception> catchHandler = null, Action finalHadler = null, CancellationTokenSource tokenSource = null)
 		{
 			try
 			{
 				if (!IsBusy)
 				{
 					IsBusy = true;
-					await action?.Invoke();
+					if (tokenSource == null)
+						tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(Constants.TASK_TIMEOUT));
+					var task = runInBackground ? Task.Run(async () => { await action?.Invoke(tokenSource.Token); }, tokenSource.Token) : action?.Invoke(tokenSource.Token);
+					await task;
 				}
 			}
 			catch (Exception ex)
 			{
 				LoggerService.LogError(ex);
 				catchHandler?.Invoke(ex);
+				tokenSource.Cancel();
 			}
 			finally
 			{
