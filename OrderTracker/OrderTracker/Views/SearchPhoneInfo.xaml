@@ -41,7 +41,7 @@
 												<ColumnDefinition Width="*" />
 											</Grid.ColumnDefinitions>
 
-											<Image Source="sim_icon.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit" />
+											<Image Source="cellphone.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFit" />
 
 											<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
 											<Label Text="{Binding Company}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
