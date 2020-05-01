@@ -6,7 +6,8 @@ using Android.OS;
 namespace OrderTracker.Droid
 {
 	[Activity(Label = "Order Manager",
-		 Icon = "@drawable/trackicon",
+		 Icon = "@mipmap/ic_launcher",
+		 RoundIcon = "@mipmap/ic_launcher",
 		 Theme = "@style/MyTheme.Splash",
 		 NoHistory = true,
 		 MainLauncher = true,

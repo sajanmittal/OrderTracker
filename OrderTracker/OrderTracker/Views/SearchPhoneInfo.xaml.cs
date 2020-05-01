@@ -9,11 +9,11 @@ namespace OrderTracker.Views
 	{
 		private SearchPhoneViewModel viewModel;
 
-		public SearchPhoneInfo()
+		public SearchPhoneInfo(bool isExipryData = false)
 		{
 			InitializeComponent();
 			if (viewModel == null)
-				viewModel = new SearchPhoneViewModel(this);
+				viewModel = new SearchPhoneViewModel(this, isExipryData);
 
 			BindingContext = viewModel;
 		}

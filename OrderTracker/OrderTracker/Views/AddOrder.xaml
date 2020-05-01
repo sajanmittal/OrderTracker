@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:controls ="clr-namespace:OrderTracker.Views.Controls"
              mc:Ignorable="d"
              x:Class="OrderTracker.Views.AddOrder"
              Title="Add Order">
 
-	<ContentPage.ToolbarItems >
+	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Search" Order="Primary" Clicked="Search_Clicked" x:Name="SearchButton" />
 	</ContentPage.ToolbarItems>
 
@@ -29,14 +30,12 @@
 					</StackLayout>
 
 					<StackLayout Style="{StaticResource FormBlock}">
-						<Label Text="Order Date : " Style="{StaticResource TextLabel}" HorizontalOptions="Start"/>
-						<DatePicker Date="{Binding Model.OrderDate}" HorizontalOptions="FillAndExpand"  />
+						<controls:PassDatePicker Date="{Binding Model.OrderDate}" HorizontalOptions="FillAndExpand" Title="Order Date" x:Name="orderPicker" />
 					</StackLayout>
 
 					<StackLayout Style="{StaticResource FormBlock}">
 						<Editor Text="{Binding Model.Detail}" Placeholder="Details" />
 					</StackLayout>
-
 				</StackLayout>
 			</ScrollView>
 

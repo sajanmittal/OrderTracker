@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
@@ -23,8 +24,14 @@ namespace OrderTracker.Droid
 			Forms.Init(this, savedInstanceState);
 			FormsMaterial.Init(this, savedInstanceState);
 			CrossCurrentActivity.Current.Init(this, savedInstanceState);
+			var startupFlags = Flags.AppStatupFlags.None;
 
-			LoadApplication(new App());
+			if (Intent?.Extras != null && !string.IsNullOrWhiteSpace(Intent.Extras.GetString(Constants.TITLE_KEY)))
+			{
+				startupFlags = Flags.AppStatupFlags.Notification;
+			}
+
+			LoadApplication(new App(startupFlags));
 		}
 
 		public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)

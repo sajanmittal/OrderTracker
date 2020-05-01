@@ -3,3 +3,4 @@ bin
 .vs
 /OrderTracker/OrderTracker/Properties/PublishProfiles
 /OrderTracker/OrderTracker/OrderTracker.csproj.user
+*.user

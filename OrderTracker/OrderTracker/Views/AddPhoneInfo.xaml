@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:controls ="clr-namespace:OrderTracker.Views.Controls"
              mc:Ignorable="d"
              x:Class="OrderTracker.Views.AddPhoneInfo"
 				 Title="Phone Information">
@@ -22,18 +23,16 @@
 				</Grid.RowDefinitions>
 
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="120" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
-				<Entry Text="{Binding Model.PhoneNo}" Placeholder="Phone Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" Keyboard="Telephone" x:Name="PhoneEntry" />
-				<Picker Title="Service Provider" ItemsSource="{Binding Operators}" SelectedItem="{Binding SelectedOperator, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" />
-				<Label Text="Sim Expiry Date : " Style="{StaticResource TextLabel}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="2" />
-				<DatePicker Date="{Binding Model.ExpiryDate}" HorizontalOptions="FillAndExpand" MinimumDate="{Binding Today}" Grid.Column="1" Grid.Row="2" />
-				<Entry Text="{Binding Model.SimNo}"  Placeholder="Sim Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Keyboard="Numeric" />
-				<Entry Text="{Binding Model.PaymentCloneNo}" Placeholder="PayZapp Clone Number" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="4" Keyboard="Numeric" />
+				<Entry Text="{Binding Model.PhoneNo}" Placeholder="Phone Number" Grid.Row="0" Keyboard="Telephone" x:Name="PhoneEntry" />
+				<Picker Title="Service Provider" ItemsSource="{Binding Operators}" SelectedItem="{Binding SelectedOperator, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}"  Grid.Row="1" />
+				<controls:PassDatePicker Title="Sim Expiry Date" Date="{Binding Model.ExpiryDate}" HorizontalOptions="FillAndExpand" MinimumDate="{Binding Today}"  Grid.Row="2" />
+				<Entry Text="{Binding Model.SimNo}"  Placeholder="Sim Number"  Grid.Row="3" Keyboard="Numeric" />
+				<Entry Text="{Binding Model.PaymentCloneNo}" Placeholder="PayZapp Clone Number" Grid.Row="4" Keyboard="Numeric" />
 
-				<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="5">
+				<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="5">
 					<StackLayout>
 						<ListView ItemsSource="{Binding AppList, Mode=TwoWay}" SeparatorVisibility="None" SeparatorColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20,10">
 							<ListView.ItemTemplate>

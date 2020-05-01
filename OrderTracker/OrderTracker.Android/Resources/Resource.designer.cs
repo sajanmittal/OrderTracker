@@ -10995,10 +10995,13 @@ namespace OrderTracker.Droid
 			public const int tooltip_frame_light = 2131165311;
 			
 			// aapt resource value: 0x7F070080
-			public const int trackicon = 2131165312;
+			public const int track = 2131165312;
 			
 			// aapt resource value: 0x7F070081
-			public const int trash = 2131165313;
+			public const int trackicon = 2131165313;
+			
+			// aapt resource value: 0x7F070082
+			public const int trash = 2131165314;
 			
 			static Drawable()
 			{

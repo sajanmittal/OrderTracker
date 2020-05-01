@@ -1,4 +1,6 @@
-﻿namespace OrderTracker
+﻿using System;
+
+namespace OrderTracker
 {
 	public static class Enums
 	{
@@ -14,6 +16,16 @@
 			Received = 0,
 			Cancelled = 100,
 			Pending = 200
+		}
+	}
+
+	public static class Flags
+	{
+		[Flags]
+		public enum AppStatupFlags
+		{
+			None,
+			Notification,
 		}
 	}
 }

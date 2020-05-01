@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using OrderTracker.Views;
 using Xamarin.Forms;
+using Color = Xamarin.Forms.Color;
 
 namespace OrderTracker
 {
@@ -9,13 +13,40 @@ namespace OrderTracker
 	{
 		public MainViewModel viewModel { get; set; }
 
-		public MainPage()
+		public MainPage(bool isRedirected = false)
 		{
 			InitializeComponent();
 			if (viewModel == null)
 			{
 				viewModel = new MainViewModel(this);
 				BindingContext = viewModel;
+			}
+			FireNotification(isRedirected);
+		}
+
+		private void FireNotification(bool isRedirected)
+		{
+			var notificationService = DependencyService.Get<INotificationService>();
+			notificationService.NotificationReceived += async (o, e) =>
+			{
+				await viewModel.PushAsync(new SearchPhoneInfo(true));
+			};
+			if (!isRedirected)
+			{
+				Task.Run(async () =>
+				{
+					var expiryDate = DateTime.Now.AddDays(4);
+					var expiringSims = await App.DbService.SelectAsync<PhoneInformation>(x => x.ExpiryDate <= expiryDate);
+					if (expiringSims.Count > 0)
+					{
+						var info = new NotificationInfo
+						{
+							Title = $"{expiringSims.Count} Expiring SIMS!!",
+							Message = $"{expiringSims.Count} SIMS are expiring before {expiryDate:dd-MMM-yyyy} by next 4 days."
+						};
+						notificationService.ScheduleNotification(info);
+					}
+				});
 			}
 		}
 
@@ -37,7 +68,7 @@ namespace OrderTracker
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				ColumnDefinitions = GetColumns(batchCount)
 			};
-			AbsoluteLayout.SetLayoutBounds(grid, new Rectangle(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutBounds(grid, new Rectangle(0, 0, 1, 0.8));
 			AbsoluteLayout.SetLayoutFlags(grid, AbsoluteLayoutFlags.All);
 
 			int rowCount = 0;

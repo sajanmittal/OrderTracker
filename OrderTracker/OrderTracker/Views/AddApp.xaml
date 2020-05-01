@@ -8,24 +8,24 @@
 				 Title="Add Application">
 
 	<ContentPage.Content>
-		<AbsoluteLayout x:Name="absLayout" BackgroundColor="White" >
+		<AbsoluteLayout x:Name="absLayout" BackgroundColor="White">
 			<StackLayout Style="{StaticResource FormBlock}" AbsoluteLayout.LayoutBounds="0, 0, 1, .1" AbsoluteLayout.LayoutFlags="All" Orientation="Vertical">
 				<Entry Text="{Binding Model.Name}" Placeholder="Application Name" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" />
 			</StackLayout>
 
 			<ScrollView AbsoluteLayout.LayoutBounds="0, 100, 1, .8" AbsoluteLayout.LayoutFlags="SizeProportional, WidthProportional">
-				<ListView ItemsSource="{Binding AppList}" Style="{StaticResource ListViewBase}" RowHeight="80" >
+				<ListView ItemsSource="{Binding AppList}" Style="{StaticResource ListViewBase}" RowHeight="80">
 					<ListView.ItemTemplate>
 						<DataTemplate>
 							<ViewCell IsEnabled="False">
 								<ContentView>
 									<Grid>
 										<Grid.RowDefinitions>
-											<RowDefinition Height="75"/>
+											<RowDefinition Height="75" />
 										</Grid.RowDefinitions>
 										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="60"/>
-											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="60" />
+											<ColumnDefinition Width="Auto" />
 										</Grid.ColumnDefinitions>
 
 										<Label Text="{Binding Id, StringFormat='{0}:'}" Style="{StaticResource AppLabel}" HorizontalOptions="EndAndExpand" Grid.Column="0" />
@@ -37,7 +37,7 @@
 					</ListView.ItemTemplate>
 					<ListView.FooterTemplate>
 						<DataTemplate>
-							<BoxView Color="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="100"/>
+							<BoxView Color="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="100" />
 						</DataTemplate>
 					</ListView.FooterTemplate>
 				</ListView>

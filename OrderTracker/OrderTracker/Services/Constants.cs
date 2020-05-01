@@ -36,5 +36,13 @@ namespace OrderTracker
 		public const string DATE_FRMT = "dd-MMM-yyyy";
 
 		public const int TASK_TIMEOUT = 180;
+
+		public const string CHANNEL_ID = "pass_default";
+
+		public const string CHANNEL_NAME = "Pass Default";
+
+		public const string TITLE_KEY = "title";
+
+		public const string MESSAGE_KEY = "message";
 	}
 }

@@ -23,7 +23,7 @@ namespace OrderTracker
 				Operators = new ObservableCollection<Operator>();
 			}
 			SavePhoneInfoCommand = new Command(async () => await SavePhoneInfo());
-			SearchCommand = new Command(async () => await PushAsync<SearchPhoneInfo>());
+			SearchCommand = new Command(async () => await PushAsync(new SearchPhoneInfo()));
 			this.isEditPage = isEditPage;
 		}
 
@@ -78,18 +78,13 @@ namespace OrderTracker
 				}
 
 				Operators.Clear();
-				Operators.AddRange(new Operator[] {
-				new Operator {Name = "Airtel", Id =1 },
-				new Operator {Name = "Vodafone",Id =2 },
-				new Operator {Name = "Reliance-Jio",Id =3 },
-				new Operator {Name = "Idea",Id =4 },
-				new Operator {Name = "Tata Docomo", Id =5 } });
+				Operators.AddRange(GetOperators());
 
 				if (isEditPage)
 				{
 					SelectedOperator = Operators.FirstOrDefault(x => x.Name == Model.Company);
 				}
-			}, true);
+			});
 		}
 
 		public ICommand SavePhoneInfoCommand { get; set; }
@@ -225,6 +220,16 @@ namespace OrderTracker
 				}
 			}
 			return isCompleted;
+		}
+
+		private List<Operator> GetOperators()
+		{
+			return new List<Operator> {
+				new Operator {Name = "Airtel", Id =1 },
+				new Operator {Name = "Vodafone",Id =2 },
+				new Operator {Name = "Reliance-Jio",Id =3 },
+				new Operator {Name = "Idea",Id =4 },
+				new Operator {Name = "Tata Docomo", Id =5 } };
 		}
 	}
 }

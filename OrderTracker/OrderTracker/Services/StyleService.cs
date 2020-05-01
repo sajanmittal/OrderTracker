@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
+using OrderTracker.Converters;
+using OrderTracker.Views.Controls;
 using Xamarin.Forms;
 
 namespace OrderTracker
@@ -24,8 +26,9 @@ namespace OrderTracker
 
 		private static void AddConverters()
 		{
-			resources.Add("Toggle", new ToggleConverter());
-			resources.Add("Null2Bool", new NullValueBoolConverter());
+			AddConverter("Toggle", new ToggleConverter());
+			AddConverter("Null2Bool", new NullValueBoolConverter());
+			AddConverter("PastDate", new PastRecordConverter());
 		}
 
 		private static void ImplicitStyles()
@@ -38,7 +41,7 @@ namespace OrderTracker
 				}
 			};
 
-			resources.Add(new Style(typeof(Entry))
+			AddStyle(new Style(typeof(Entry))
 			{
 				Setters =
 					 {
@@ -51,7 +54,7 @@ namespace OrderTracker
 			}
 			);
 
-			resources.Add(new Style(typeof(ActivityIndicator))
+			AddStyle(new Style(typeof(ActivityIndicator))
 			{
 				Setters =
 					{
@@ -64,7 +67,7 @@ namespace OrderTracker
 				BasedOn = materialDesignBase
 			});
 
-			resources.Add(new Style(typeof(Label))
+			AddStyle(new Style(typeof(Label))
 			{
 				BasedOn = materialDesignBase,
 				Setters =
@@ -74,7 +77,7 @@ namespace OrderTracker
 				}
 			});
 
-			resources.Add(new Style(typeof(DatePicker))
+			AddStyle(new Style(typeof(PassDatePicker))
 			{
 				Setters =
 					 {
@@ -83,12 +86,12 @@ namespace OrderTracker
 						Setter(DatePicker.DateProperty, DateTime.Now),
 						Setter(DatePicker.FormatProperty, Constants.DATE_FRMT),
 						Setter(DatePicker.TextColorProperty, Color.Accent),
-						Setter(VisualElement.BackgroundColorProperty, Color.White)
+						Setter(VisualElement.BackgroundColorProperty, Color.Transparent)
 					 },
 				BasedOn = materialDesignBase
 			});
 
-			resources.Add(new Style(typeof(Button))
+			AddStyle(new Style(typeof(Button))
 			{
 				Setters =
 					 {
@@ -102,7 +105,7 @@ namespace OrderTracker
 				BasedOn = materialDesignBase
 			});
 
-			resources.Add(new Style(typeof(Editor))
+			AddStyle(new Style(typeof(Editor))
 			{
 				Setters =
 					 {
@@ -116,7 +119,7 @@ namespace OrderTracker
 			}
 			);
 
-			resources.Add(new Style(typeof(AbsoluteLayout))
+			AddStyle(new Style(typeof(AbsoluteLayout))
 			{
 				Setters =
 				{
@@ -125,7 +128,7 @@ namespace OrderTracker
 				BasedOn = materialDesignBase
 			});
 
-			resources.Add(new Style(typeof(CheckBox))
+			AddStyle(new Style(typeof(CheckBox))
 			{
 				Setters =
 					{
@@ -136,7 +139,7 @@ namespace OrderTracker
 				BasedOn = materialDesignBase
 			});
 
-			resources.Add(new Style(typeof(SearchBar))
+			AddStyle(new Style(typeof(SearchBar))
 			{
 				Setters =
 					{
@@ -148,7 +151,7 @@ namespace OrderTracker
 				BasedOn = materialDesignBase
 			});
 
-			resources.Add(new Style(typeof(Picker))
+			AddStyle(new Style(typeof(Picker))
 			{
 				Setters =
 					 {
@@ -320,6 +323,22 @@ namespace OrderTracker
 			var styleInfo = style.GetMemberInfo();
 			if (!resources.ContainsKey(styleInfo.Name))
 				resources.Add(styleInfo.Name, style?.Compile().Invoke());
+		}
+
+		private static void AddStyle(Style style)
+		{
+			if (!resources.ContainsKey(style.TargetType.FullName))
+			{
+				resources.Add(style);
+			}
+		}
+
+		private static void AddConverter(string key, IValueConverter converter)
+		{
+			if (!resources.ContainsKey(key))
+			{
+				resources.Add(key, converter);
+			}
 		}
 
 		private static Setter Setter(BindableProperty property, object value) => new Setter { Property = property, Value = value };

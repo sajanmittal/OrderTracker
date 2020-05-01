@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using OrderTracker.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace OrderTracker
@@ -14,6 +15,8 @@ namespace OrderTracker
 			BackupCommand = new Command(async () => await BackupData());
 			RestoreCommand = new Command(async () => await RestoreData());
 		}
+
+		public string Title => $"Order Manager -{VersionTracking.CurrentVersion}";
 
 		public ICommand BackupCommand { get; private set; }
 

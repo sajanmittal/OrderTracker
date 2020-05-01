@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="OrderTracker.Views.SearchPhoneInfo"
-				 Title="Search Phone Information">
+			 Title="Search Phone Information">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem IconImageSource="download.png" Text="Report" Command="{Binding GenerateReportCommad}" />
 	</ContentPage.ToolbarItems>
@@ -25,7 +25,6 @@
 
 				<SearchBar Placeholder="Phone Number" TextChanged="PhoneSearchBar_TextChanged" Grid.Row="0" />
 				<ListView x:Name="PhoneListView" ItemsSource="{Binding PhoneInfoList}" Style="{StaticResource ListViewLayout}" HeightRequest="{Binding Path=Height, Source={x:Reference absLayout}}" Grid.Row="1" SelectedItem="{Binding Model, Mode=TwoWay}" ItemTapped="PhoneListView_ItemTapped">
-					<!--Built in Cells-->
 					<ListView.ItemTemplate>
 						<DataTemplate>
 							<ViewCell>
@@ -46,8 +45,13 @@
 
 											<Label Text="{Binding PhoneNo}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
 											<Label Text="{Binding Company}" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
-											<Label Text="{Binding ExpiryDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" />
+											<Label Text="{Binding ExpiryDate, StringFormat='{0:dd-MMM-yyyy}'}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextLabel}" HorizontalOptions="FillAndExpand" x:Name="ExipryDate" />
 										</Grid>
+										<Frame.Triggers>
+											<DataTrigger TargetType="Frame" Value="True" Binding="{Binding Source={x:Reference ExipryDate}, Path= Text, Converter={StaticResource PastDate}}">
+												<Setter Property="BorderColor" Value="Red" />
+											</DataTrigger>
+										</Frame.Triggers>
 									</Frame>
 								</ContentView>
 							</ViewCell>

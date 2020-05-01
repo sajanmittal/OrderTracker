@@ -6,10 +6,10 @@
              mc:Ignorable="d"
              x:Class="OrderTracker.Views.SearchOrder"
 				 Title="Search Order">
-    <ContentPage.Content>
+	<ContentPage.Content>
 		<AbsoluteLayout>
 			<ScrollView Style="{StaticResource FormScroll}">
-				<StackLayout Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}" >
+				<StackLayout Style="{StaticResource Form}"  IsEnabled="{Binding IsBusy, Converter={StaticResource Toggle}}">
 					<StackLayout  Style="{StaticResource FormBlock}">
 						<Entry Keyboard="Numeric" Text="{Binding Model.CloneNo}" Placeholder="Clone Number" />
 					</StackLayout>
@@ -21,12 +21,11 @@
 					<StackLayout  Style="{StaticResource FormBlock}">
 						<Entry Keyboard="Telephone" Text="{Binding Model.PhoneNo}" Placeholder="Mobile Number" />
 					</StackLayout>
-
 				</StackLayout>
 			</ScrollView>
 
 			<Button Text="Search" Command="{Binding SearchCommand}" Style="{StaticResource AbsSubmit}" />
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
-    </ContentPage.Content>
+	</ContentPage.Content>
 </ContentPage>

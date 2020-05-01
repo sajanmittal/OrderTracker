@@ -5,11 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="OrderTracker.MainPage"
-             Title="Order Manager">
+             Title="{Binding Title}">
 
 	<ContentPage.Content>
 		<AbsoluteLayout x:Name="absLayout">
-
 			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" AbsoluteLayout.LayoutBounds="0.5,0.5,100,100" />
 		</AbsoluteLayout>
 	</ContentPage.Content>

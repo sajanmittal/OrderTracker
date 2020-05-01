@@ -11,12 +11,21 @@ namespace OrderTracker
 
 		public static SqlLiteDbService DbService => db;
 
-		public App()
+		public App(Flags.AppStatupFlags statupFlags)
 		{
 			InitializeComponent();
 			Resources = StyleService.InitializeResources();
-			MainPage = new NavigationPage(new MainPage());
 			db = new SqlLiteDbService();
+			DependencyService.Get<INotificationService>().Initialize();
+
+			MainPage = new NavigationPage(new MainPage(statupFlags == Flags.AppStatupFlags.Notification));
+
+			switch (statupFlags)
+			{
+				case Flags.AppStatupFlags.Notification:
+					FireReceiveNotification();
+					break;
+			}
 		}
 
 		protected async override void OnStart()
@@ -50,6 +59,11 @@ namespace OrderTracker
 			{
 				await Permissions.RequestAsync<Permissions.StorageWrite>();
 			}
+		}
+
+		private void FireReceiveNotification()
+		{
+			DependencyService.Get<INotificationService>().ReceiveNotification(null);
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace OrderTracker
@@ -48,7 +47,5 @@ namespace OrderTracker
 		{
 			await BindingPage.Navigation.PopAsync();
 		}
-
-		public DateTime Today => DateTime.Today;
 	}
 }

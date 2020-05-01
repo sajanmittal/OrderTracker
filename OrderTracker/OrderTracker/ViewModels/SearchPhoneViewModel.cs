@@ -11,7 +11,7 @@ namespace OrderTracker
 {
 	public class SearchPhoneViewModel : ViewModelBase<PhoneInformation>
 	{
-		public SearchPhoneViewModel(Page page) : base(page)
+		public SearchPhoneViewModel(Page page, bool isExipryData) : base(page)
 		{
 			if (PhoneInfoList == null)
 			{
@@ -19,7 +19,10 @@ namespace OrderTracker
 			}
 			GenerateReportCommad = new Command(async () => await DownloadReport());
 			ItemTapped = new Command<PhoneInformation>(async (item) => await ItemTap(item));
+			this.isExipryData = isExipryData;
 		}
+
+		private bool isExipryData;
 
 		private ObservableCollection<PhoneInformation> phoneInfoList;
 
@@ -31,13 +34,16 @@ namespace OrderTracker
 
 		public async Task SetPhoneInfo()
 		{
-			var data = await App.DbService.SelectAsync<PhoneInformation>();
+			var nextDay = DateTime.Today.AddDays(4);
+			var data = isExipryData ? await App.DbService.SelectAsync<PhoneInformation>(x => x.ExpiryDate <= nextDay) : await App.DbService.SelectAsync<PhoneInformation>();
 			if (data.Any())
 			{
 				PhoneInfoList.Clear();
 				PhoneInfoList.AddRange(data);
 			}
 		}
+
+		public string ListHeader => isExipryData ? "Sims Expiring in next 4 days." : "Sim Information";
 
 		public ICommand GenerateReportCommad { get; set; }
 
@@ -68,7 +74,7 @@ namespace OrderTracker
 
 			if (response.IsGenerated)
 			{
-				LoggerService.LogInformation($"Report {fileName} Successfully Dowloaded ");
+				LoggerService.LogInformation($"Report {fileName} Successfully Downloaded ");
 			}
 		}
 

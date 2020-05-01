@@ -6,8 +6,9 @@
     <Authors>PASS Developers</Authors>
     <Company>PASS Pvt. Ltd</Company>
     <Product>Order Tracker</Product>
-    <PackageIcon>playstore-icon.png</PackageIcon>
+    <PackageIcon>track_sm.png</PackageIcon>
     <PackageIconUrl />
+    <Copyright>@2020 PASS</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,10 +19,9 @@
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.10.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="1.2.0.223" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.657" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +48,10 @@
   <ItemGroup>
     <None Update="Views\SearchPhoneInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Include="C:\Users\Sajan\Desktop\track_sm.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
 </Project>
