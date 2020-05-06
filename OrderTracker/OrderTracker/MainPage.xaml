@@ -9,7 +9,7 @@
 
 	<ContentPage.Content>
 		<AbsoluteLayout x:Name="absLayout">
-			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" AbsoluteLayout.LayoutBounds="0.5,0.5,100,100" />
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 		</AbsoluteLayout>
 	</ContentPage.Content>
 </ContentPage>
