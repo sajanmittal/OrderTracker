@@ -57,10 +57,11 @@ namespace OrderTracker
 		{
 			var workSheetTasks = new List<Task>();
 			var workSheets = new List<Sheet>();
-			uint sheetNumber = 1;
+			uint sheetNumber = 0;
 			foreach (DataTable table in dataSet.Tables)
 			{
-				workSheetTasks.Add(Task.Run(() =>
+				sheetNumber++;
+				workSheetTasks.Add(new Task(() =>
 				{
 					WorksheetPart newWorksheetPart = workbook.AddNewPart<WorksheetPart>();
 					newWorksheetPart.Worksheet = new Worksheet();
@@ -78,7 +79,6 @@ namespace OrderTracker
 					newWorksheetPart.Worksheet.Save();
 					workSheets.Add(sheet);
 				}));
-				sheetNumber++;
 			}
 
 			var allTasks = Task.WhenAll(workSheetTasks);

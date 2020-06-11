@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,7 +11,7 @@ namespace OrderTracker
 {
 	public static class GlobalExtensions
 	{
-		#region Expression Entensions
+		#region Expression Extensions
 
 		public static MemberInfo GetMemberInfo(this Expression expression)
 		{
@@ -30,7 +29,7 @@ namespace OrderTracker
 			return operand.Member;
 		}
 
-		#endregion Expression Entensions
+		#endregion Expression Extensions
 
 		#region IEnunbrable Extensions
 
@@ -57,9 +56,33 @@ namespace OrderTracker
 			);
 		}
 
+
+		public async static Task ForEachAsync<T>(this IEnumerable<T> collection, Func<T, Task> action)
+		{
+			if (collection.Any())
+			{
+				foreach (T data in collection)
+				{
+					await action(data);
+				}
+			}
+		}
+
+		public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+		{
+			if (collection.Any())
+			{
+				foreach (T data in collection)
+				{
+					action(data);
+				}
+			}
+		}
+
+
 		#endregion IEnunbrable Extensions
 
-		#region System.Type Extenstions
+		#region System.Type Extensions
 
 		public static Type GetNullableType(this Type t)
 		{
@@ -73,11 +96,11 @@ namespace OrderTracker
 
 		public static bool IsNullableType(this Type type) => type == typeof(string) || type.IsArray || (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)));
 
-		#endregion System.Type Extenstions
+		#endregion System.Type Extensions
 
-		#region ObservableCollection Extensions
+		#region Collection Extensions
 
-		public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> data)
+		public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> data)
 		{
 			foreach (T item in data)
 			{
@@ -85,29 +108,8 @@ namespace OrderTracker
 			}
 		}
 
-		public static async Task ForEachAsync<T>(this ObservableCollection<T> collection, Func<T, Task> action)
-		{
-			if (collection.Any())
-			{
-				foreach (T data in collection)
-				{
-					await action(data);
-				}
-			}
-		}
 
-		public static void ForEach<T>(this ObservableCollection<T> collection, Action<T> action)
-		{
-			if (collection.Any())
-			{
-				foreach (T data in collection)
-				{
-					action(data);
-				}
-			}
-		}
-
-		#endregion ObservableCollection Extensions
+		#endregion Collection Extensions
 
 		#region SQLiteConnection Extensions
 
